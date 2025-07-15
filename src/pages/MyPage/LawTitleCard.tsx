@@ -102,6 +102,10 @@ const Button = styled.button`
   font-size: 16px;
   font-weight: 500;
   background-color: #FCFCFC;
+
+  &:hover {
+    background-color: #f1f1f1;
+  }
 `
 
 const Line = styled.div`
