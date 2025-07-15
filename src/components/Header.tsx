@@ -27,8 +27,8 @@ const HeaderContainer = styled.header`
 `;
 
 const Logo = styled.div`
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 900;
   color: #000000;
 `;
 
