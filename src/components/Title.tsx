@@ -21,7 +21,7 @@ const Container = styled.div`
 `;
 
 const MainTitle = styled.div`
-  font-size: 48px;
+  font-size: 40px;
   font-weight: 600;
   color: #000000;
 `;
