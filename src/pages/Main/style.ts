@@ -1,5 +1,15 @@
 import styled from "@emotion/styled";
 
+const hoverLiftStyle = `
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0px 4px 20px rgba(45, 47, 75, 0.1);
+  }
+`;
+
 export const BillOverviewPage = styled.div`
   display: flex;
   flex-direction: column;
@@ -29,6 +39,8 @@ export const AllBillsSummaryBox = styled.div`
   border-radius: 12px;
   border: 1px solid #D8D8D8;
   background-color: #fff;
+
+  ${hoverLiftStyle}
 `
 
 export const AllBillsTitle = styled.p`
@@ -51,24 +63,6 @@ export const QuickLinks = styled.div`
   gap: 20px;
 `
 
-export const LatestBillsLinkBox = styled.div<{ bg?: string }>`
-  position: relative;
-  width: 228px;
-  height: 178px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 25px 20px;
-  border-radius: 12px;
-  background-color: #0C53E0;
-  overflow: hidden;
-
-  background-color: ${({ bg }) => (bg ? "transparent" : "#0C53E0")};
-  background-image: ${({ bg }) => (bg ? `url(${bg})` : "none")};
-  background-size: cover;
-  background-position: center;
-`
-
 export const LinkText = styled.p`
   font-size: 22px;
   font-weight: 700;
@@ -84,6 +78,25 @@ export const ArrowIconWrapper = styled.div`
   align-items: center;
   border-radius: 12px;
   border: 1px solid #EEEEEE;
+`
+
+export const LatestBillsLinkBox = styled.div<{ bg?: string }>`
+  position: relative;
+  width: 228px;
+  height: 178px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 25px 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: ${({ bg }) => (bg ? "transparent" : "#0C53E0")};
+  background-image: ${({ bg }) => (bg ? `url(${bg})` : "none")};
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+
+  ${hoverLiftStyle}
 `
 
 export const ArrowWrapper = styled.div`
@@ -122,6 +135,20 @@ export const ShowMoreButton = styled.div`
   border: 1px solid #575757;
   max-width: fit-content;
   border-radius: 30px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.03);
+
+    & > p {
+      color: white;
+    }
+
+    svg {
+      stroke: white;
+    }
+  }
 `
 
 export const ShowMoreText = styled.p`

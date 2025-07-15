@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { useState, useEffect } from "react";
 import { Banner1, Banner2, Banner3 } from "../../assets";
+import { motion, AnimatePresence } from "framer-motion";
 
 const bannerData = [
   {
@@ -26,7 +27,7 @@ export const Banner = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % bannerData.length);
-    }, 5000);
+    }, 8000);
     return () => clearInterval(interval);
   }, []);
 
@@ -34,12 +35,27 @@ export const Banner = () => {
 
   return (
     <Container bg={currentBanner.image}>
-      <Content>
-        <TextWrapper>
-          <Title>{currentBanner.title}</Title>
-          <SubTitle>{currentBanner.subTitle}</SubTitle>
-        </TextWrapper>
-      </Content>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentIndex}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4 }}
+          style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
+        >
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <TextWrapper>
+              <Title>{currentBanner.title}</Title>
+              <SubTitle>{currentBanner.subTitle}</SubTitle>
+            </TextWrapper>
+          </motion.div>
+        </motion.div>
+      </AnimatePresence>
 
       <ControllerWrapper>
         <CurrentText>{String(currentIndex + 1).padStart(2, '0')}</CurrentText>
@@ -63,13 +79,6 @@ const Container = styled.div<{ bg: string }>`
   
   position: relative;
 `;
-
-const Content = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`
 
 const TextWrapper = styled.div`
   display: flex;
