@@ -2,12 +2,23 @@ import styled from '@emotion/styled';
 import { authImg } from '../assets';
 import { Button, Inputs, Title } from '../components';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
+  const navigate = useNavigate();
+
   const [datas, setDatas] = useState<{ id: string; password: string }>({
     id: '',
     password: '',
   });
+
+  const handleSignUpClick = () => {
+    navigate('/signup');
+  };
+
+  const handleLoginClick = () => {
+    //login api 호출
+  };
 
   const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -43,10 +54,12 @@ export const Login = () => {
             />
           </SubContainer>
           <SubContainer style={{ alignItems: 'center' }}>
-            <Button width="100%">로그인</Button>
+            <Button onClick={handleLoginClick} width="100%">
+              로그인
+            </Button>
             <SubNavContainer>
               <SubNavTitle>아직 회원이 아니신가요?</SubNavTitle>
-              <SubNav>회원가입</SubNav>
+              <SubNav onClick={handleSignUpClick}>회원가입</SubNav>
             </SubNavContainer>
           </SubContainer>
         </MainContainer>

@@ -6,6 +6,7 @@ interface IButtonType {
   color?: string;
   width?: string;
   borderColor?: string;
+  onClick: () => void;
 }
 
 export const Button = ({
@@ -14,9 +15,11 @@ export const Button = ({
   backgroundColor = '#1D3055',
   borderColor,
   color = '#ffffff',
+  onClick,
 }: IButtonType) => {
   return (
     <ButtonContainer
+      onClick={onClick}
       borderColor={borderColor}
       width={width}
       color={color}
