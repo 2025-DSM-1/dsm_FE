@@ -34,7 +34,7 @@ export const Inputs = ({
           value={value}
           onChange={onChange}
           width={width}
-          type={isEye ? 'text' : 'password'}
+          type={isEye ? 'password' : 'text'}
         />
         {isPwd && <Eyes onClick={eyeClick} isEye={isEye} />}
       </EyesContainer>
