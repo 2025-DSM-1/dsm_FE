@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { useState } from 'react';
 
 export const Header = () => {
-  const [name, setName] = useState<string>('박예빈');
+  const [name, _] = useState<string>('박예빈');
   return (
     <HeaderContainer>
       <Logo>KNOWLAW</Logo>

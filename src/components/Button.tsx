@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 interface IButtonType {
-  children: string;
+  children: React.ReactNode;
   backgroundColor?: string;
   color?: string;
   width?: string;
