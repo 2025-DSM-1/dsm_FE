@@ -1,8 +1,24 @@
 import styled from '@emotion/styled';
 import { authImg } from '../assets';
 import { Button, Inputs, Title } from '../components';
+import { useState } from 'react';
 
 export const Login = () => {
+  const [datas, setDatas] = useState<{ id: string; password: string }>({
+    id: '',
+    password: '',
+  });
+
+  const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setDatas((datas) => ({ ...datas, id: value }));
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setDatas((datas) => ({ ...datas, password: value }));
+  };
+
   return (
     <AllContainer>
       <LoginAllContainer>
@@ -12,8 +28,15 @@ export const Login = () => {
             subTitle="로그인 하여 서비스를 이용해 보세요."
           />
           <SubContainer>
-            <Inputs placeholder="이메일을 입력해 주세요." label="이메일" />
             <Inputs
+              value={datas.id}
+              onChange={handleIdChange}
+              placeholder="이메일을 입력해 주세요."
+              label="이메일"
+            />
+            <Inputs
+              value={datas.password}
+              onChange={handlePasswordChange}
               placeholder="비밀번호를 입력해 주세요."
               label="비밀번호"
               isPwd={true}
