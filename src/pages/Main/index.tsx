@@ -2,10 +2,12 @@ import * as S from "./style"
 import { Banner } from "./Banner"
 import { Arrow, LatestBillsLinkBox } from "../../assets"
 import { BillCard } from "./Card"
+import { useNavigate } from "react-router-dom"
 
 export const Main = () => {
+  const navigation = useNavigate()
   const items = Array.from({ length: 9 });
-  
+
   return (
     <S.BillOverviewPage>
       <S.TopSection>
@@ -49,7 +51,7 @@ export const Main = () => {
                     <S.SectionTitle>{`한눈에 보는\n최신 법안 현황`}</S.SectionTitle>
                     <S.SectionDescription>{`법안 명과 현재 상태,\n핵심 내용을 쉽게 확인하세요.`}</S.SectionDescription>
                   </S.SectionTitleWrapper>
-                  <S.ShowMoreButton>
+                  <S.ShowMoreButton onClick={() => navigation('/bill/list')}>
                     <S.ShowMoreText>더보기</S.ShowMoreText>
                     <Arrow color="#575757" size={18} rotate="right" />
                   </S.ShowMoreButton>

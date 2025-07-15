@@ -42,6 +42,13 @@ const CardWrapper = styled.div`
   perspective: 1000px;
   width: 368px;
   height: 266px;
+
+  &:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  }
+  cursor: pointer;
 `;
 
 const CardInner = styled.div<{ isFront: boolean }>`
