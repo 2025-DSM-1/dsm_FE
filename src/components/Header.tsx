@@ -1,12 +1,14 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const Header = () => {
+  const navigation = useNavigate();
   const [name, _] = useState<string>('박예빈');
   return (
     <HeaderContainer>
-      <Logo>KNOWLAW</Logo>
-      <UserName>{name} 님</UserName>
+      <Logo onClick={() => navigation('main')}>KNOWLAW</Logo>
+      <UserName onClick={() => navigation('mypage')}>{name} 님</UserName>
     </HeaderContainer>
   );
 };
