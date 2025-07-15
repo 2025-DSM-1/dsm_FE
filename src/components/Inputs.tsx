@@ -1,58 +1,77 @@
+import { useState } from 'react';
+import { Eyes } from '../assets';
 import styled from '@emotion/styled';
 
-interface PropsType {
+interface IInputsType {
   value?: string;
-  type?: string;
-  placeholder?: string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder: string;
+  width?: string;
+  isPwd?: boolean;
   label?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const Inputs = ({
   value,
-  type = 'text',
-  placeholder = '입력해주세요',
-  label = '',
   onChange,
-  ...props
-}: PropsType) => {
+  placeholder,
+  width = '100%',
+  isPwd,
+  label,
+}: IInputsType) => {
+  const [isEye, setIsEye] = useState<boolean>(false);
+
+  const eyeClick = () => {
+    setIsEye(!isEye);
+  };
+
   return (
     <InputContainer>
-      {label && <Label>{label}</Label>}
-      <InputBox
-        type={type}
-        value={value}
-        placeholder={placeholder}
-        onChange={onChange}
-        {...props}
-      />
+      <Label>{label}</Label>
+      <EyesContainer width={width}>
+        <Input
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          width={width}
+          type={isEye ? 'text' : 'password'}
+        />
+        {isPwd && <Eyes onClick={eyeClick} isEye={isEye} />}
+      </EyesContainer>
     </InputContainer>
   );
 };
 
 const InputContainer = styled.div`
-  width: 400px;
   display: flex;
   flex-direction: column;
   gap: 8px;
 `;
 
 const Label = styled.label`
-  color: #222222;
   font-size: 16px;
+  color: #222222;
   font-weight: 500;
 `;
-const InputBox = styled.input`
-  padding: 16px;
+
+const Input = styled.input<{ width: string }>`
+  width: ${({ width }) => width};
+  height: 56px;
   border-radius: 8px;
   border: 1px solid #eeeeee;
+  padding: 16px;
   background-color: #f6f6f6;
   font-size: 16px;
-  font-weight: 400;
-
-  &:focus {
-    outline: none;
-    border: 1px solid #cccccc;
-    background-color: #f6f6f6;
+  color: #171717;
+  &::placeholder {
+    font-size: 16px;
+    font-weight: 400;
+    color: #888888;
   }
+`;
+
+const EyesContainer = styled.div<Pick<IInputsType, 'width'>>`
+  width: ${({ width }) => width};
+  height: fit-content;
+  position: relative;
 `;
