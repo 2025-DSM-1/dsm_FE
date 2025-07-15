@@ -1,5 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { Login, SignUp, CardDetail, BillList, Main } from './pages';
+import { Login, SignUp, CardDetail, BillList, Main, MyPage } from './pages';
 import { RootLayout } from './layout';
 
 export const Router = createBrowserRouter([
@@ -30,6 +30,10 @@ export const Router = createBrowserRouter([
       {
         path: 'main',
         element: <Main />,
+      },
+      {
+        path: 'myPage',
+        element: <MyPage />,
       },
     ],
   },
