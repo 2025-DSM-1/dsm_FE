@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import { UserInformation } from "./UserInformation";
 import { Favorites } from "./Favorites"
+import { motion } from "framer-motion";
 
 const accountItems = ["회원정보 확인"];
 const favoriteItems = ["즐겨찾기한 법안"];
@@ -45,8 +46,27 @@ export const MyPage = () => {
           </SideBarContainer>
         </SideSection>
 
-        {selected === "회원정보 확인" && <UserInformation />}
-        {selected === "즐겨찾기한 법안" && <Favorites />}
+        {selected === "회원정보 확인" && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            style={{ width: "100%" }}
+            key="info"
+          >
+            <UserInformation />
+          </motion.div>
+        )}
+
+        {selected === "즐겨찾기한 법안" && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            style={{ width: "100%" }}
+            key="fav"
+          >
+            <Favorites />
+          </motion.div>
+        )}
       </Content>
     </Container>
   )

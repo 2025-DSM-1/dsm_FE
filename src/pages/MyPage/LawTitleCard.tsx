@@ -30,6 +30,12 @@ const CardContainer = styled.div`
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0px 4px 20px rgba(45, 47, 75, 0.1);
+
+  &:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  }
   cursor: pointer;
 `
 
