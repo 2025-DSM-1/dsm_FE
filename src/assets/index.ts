@@ -1,2 +1,10 @@
 export * from './Eyes';
 export { default as authImg } from './authImg.png';
+export * from './Star';
+export { default as banner } from './banner.png';
+export * from './Committee';
+export * from './Enforce';
+export * from './Passing';
+export * from './Promulgate';
+export * from './Receipt';
+export * from './Sentence';

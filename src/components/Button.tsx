@@ -43,4 +43,5 @@ const ButtonContainer = styled.button<Omit<IButtonType, 'children'>>`
   align-items: center;
   font-size: 18px;
   font-weight: 500;
+  cursor: pointer;
 `;
