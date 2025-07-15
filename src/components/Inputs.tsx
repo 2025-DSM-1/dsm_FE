@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 interface IInputsType {
   value?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder: string;
+  placeholder?: string;
   width?: string;
   isPwd?: boolean;
   label?: string;
@@ -14,7 +14,7 @@ interface IInputsType {
 export const Inputs = ({
   value,
   onChange,
-  placeholder,
+  placeholder = '입력해주세요',
   width = '100%',
   isPwd,
   label,
