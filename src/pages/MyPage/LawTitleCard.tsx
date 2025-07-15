@@ -34,7 +34,6 @@ const CardContainer = styled.div`
 `
 
 const CardWrapper = styled.div`
-  perspective: 1000px;
   width: 368px;
   height: 266px;
   position: relative;
@@ -86,7 +85,7 @@ const ButtonWrapper = styled.div`
   display: flex;
 `
 
-const Button = styled.div`
+const Button = styled.button`
   flex: 1;
   height: 58px;
   display: flex;
@@ -96,6 +95,7 @@ const Button = styled.div`
   border-top: 1px solid #E3E3E3;
   font-size: 16px;
   font-weight: 500;
+  background-color: #FCFCFC;
 `
 
 const Line = styled.div`
