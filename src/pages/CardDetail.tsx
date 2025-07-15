@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { banner, Star } from '../assets';
 
 export const CardDetail = () => {
-  const [datas, setDatas] = useState<{
+  const [datas, _] = useState<{
     lawId: number;
     lawTitle: string;
     lawSummaryContent: string;
