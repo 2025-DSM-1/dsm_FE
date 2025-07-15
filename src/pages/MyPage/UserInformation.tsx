@@ -79,7 +79,7 @@ const Title = styled.p`
 `
 
 const Content = styled.div`
-  padding: 40px 20px;
+  padding: 40px 20px 200px;
   display: flex;
   justify-content: space-between;
 `

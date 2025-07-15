@@ -31,7 +31,7 @@ const Title = styled.p`
 `
 
 const Content = styled.div`
-  padding: 40px 35px;
+  padding: 40px 35px 200px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 35px;
