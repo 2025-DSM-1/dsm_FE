@@ -1,12 +1,21 @@
 import styled from "@emotion/styled";
 import { Inputs } from "../../components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useMy } from "../../apis/User";
 
 export const UserInformation = () => {
+  // const { data } = useMy();
+
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
   const [emailConsent, setEmailConsent] = useState<boolean>(false);
+
+  // useEffect(() => {
+  //   if (data) {
+  //     setName(data.name || '');
+  //     setEmail(data.email || '');
+  //   }
+  // }, [data]);
 
   const handleChange =
     (setter: React.Dispatch<React.SetStateAction<string>>) =>
@@ -24,13 +33,7 @@ export const UserInformation = () => {
       value: email,
       label: "이메일",
       onChange: handleChange(setEmail),
-    },
-    {
-      value: password,
-      label: "비밀번호",
-      onChange: handleChange(setPassword),
-      isPwd: true,
-    },
+    }
   ];
 
   return (
@@ -44,7 +47,6 @@ export const UserInformation = () => {
               value={input.value}
               label={input.label}
               onChange={input.onChange}
-              isPwd={input.isPwd}
             />
           ))}
           <EmailConsentRow>
