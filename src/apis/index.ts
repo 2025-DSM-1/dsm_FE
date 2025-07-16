@@ -1,5 +1,5 @@
-import axios, { AxiosError } from "axios"
-import { getToken, setToken } from "./function/TokenManager";
+import axios, { AxiosError } from 'axios';
+import { getToken, setToken } from './function/TokenManager';
 
 const BASEURL = import.meta.env.VITE_BASE_URL;
 
@@ -10,8 +10,8 @@ export const instance = axios.create({
 
 export const refreshInstance = axios.create({
   baseURL: BASEURL,
-  timeout: 10000
-})
+  timeout: 10000,
+});
 
 instance.interceptors.response.use(
   (response) => response,
@@ -19,26 +19,30 @@ instance.interceptors.response.use(
     if (axios.isAxiosError(error) && error.response) {
       const originalRequest: any = error.config;
 
-      if (error.response.status === 401 && !originalRequest._retry && !originalRequest.url.includes('/auth/refresh')) {
+      if (
+        error.response.status === 401 &&
+        !originalRequest._retry &&
+        !originalRequest.url.includes('/auth/refresh')
+      ) {
         originalRequest._retry = true;
 
         try {
           const refreshToken = getToken().refreshToken;
 
-          const res = await refreshInstance.get("/auth/refresh", {
+          const res = await refreshInstance.get('/auth/refresh', {
             headers: {
-              "authorization": `Bearer ${refreshToken}`,
+              authorization: `Bearer ${refreshToken}`,
             },
           });
 
           const { access_token, refresh_token } = res.data;
           setToken(access_token, refresh_token);
 
-          originalRequest.headers["authorization"] = `Bearer ${access_token}`;
+          originalRequest.headers['authorization'] = `Bearer ${access_token}`;
 
           return instance(originalRequest);
         } catch (refreshError) {
-          window.location.href = "/login";
+          window.location.href = '/login';
           return Promise.reject(refreshError);
         }
       }
@@ -47,6 +51,5 @@ instance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 
 export default instance;

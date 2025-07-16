@@ -8,9 +8,7 @@ const path = '/auth';
 interface SignUpData {
   name: string;
   email: string;
-  authCode: string;
   password: string;
-  passwordCheck: string;
 }
 
 interface LoginData {

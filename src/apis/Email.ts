@@ -1,11 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
-import type { AxiosError } from "axios";
-import instance from "./index";
+import { useMutation } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
+import instance from './index';
 
-const path ='/email'
+const path = '/email';
 
 interface EmailVerifyData {
-  email: string
+  email: string;
 }
 
 interface EmailVerifyResponse {
@@ -13,14 +13,13 @@ interface EmailVerifyResponse {
 }
 
 interface VerifyAuthCodeData {
-  email: string,
-  authCode: string
+  email: string;
+  authCode: string;
 }
 
 interface VerifyAuthCodeResponse {
-  isVerified: boolean
+  isVerified: boolean;
 }
-
 
 // 이메일 중복 확인
 export const useCheckEmailDuplicate = () => {
@@ -30,13 +29,13 @@ export const useCheckEmailDuplicate = () => {
       return response.data;
     },
     onSuccess: () => {
-      console.log("이메일 중복 확인 성공");
+      console.log('이메일 중복 확인 성공');
     },
     onError: (error) => {
       console.error(error.message);
-    }
-  })
-}
+    },
+  });
+};
 
 // 인증 코드 발송
 export const useSendAuthCode = () => {
@@ -45,26 +44,29 @@ export const useSendAuthCode = () => {
       await instance.post(`${path}/auth-code`, { email });
     },
     onSuccess: () => {
-      console.log("인증 코드 발송 성공")
+      console.log('인증 코드 발송 성공');
     },
     onError: (error) => {
       console.error(error.message);
-    }
-  })
-}
+    },
+  });
+};
 
 // 인증 코드 확인
 export const useVerifyAuthCode = () => {
   return useMutation<VerifyAuthCodeResponse, AxiosError, VerifyAuthCodeData>({
     mutationFn: async (formData) => {
-      const response  = await instance.post(`${path}/auth-code/verify`, formData);
+      const response = await instance.post(
+        `${path}/auth-code/verify`,
+        formData
+      );
       return response.data;
     },
     onSuccess: () => {
-      console.log("인증 코드 확인 성공")
+      console.log('인증 코드 확인 성공');
     },
     onError: (error) => {
       console.error(error.message);
-    }
-  })
-}
+    },
+  });
+};
