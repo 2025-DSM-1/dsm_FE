@@ -1,11 +1,11 @@
-import * as S from "./style"
-import { Banner } from "./Banner"
-import { Arrow, LatestBillsLinkBox } from "../../assets"
-import { BillCard } from "./Card"
-import { useNavigate } from "react-router-dom"
+import * as S from './style';
+import { Banner } from './Banner';
+import { Arrow, LatestBillsLinkBox } from '../../assets';
+import { BillCard } from './Card';
+import { useNavigate } from 'react-router-dom';
 
 export const Main = () => {
-  const navigation = useNavigate()
+  const navigation = useNavigate();
   const items = Array.from({ length: 9 });
 
   return (
@@ -14,7 +14,7 @@ export const Main = () => {
         <Banner />
 
         <S.SideSection>
-          <S.AllBillsSummaryBox>
+          <S.AllBillsSummaryBox onClick={() => navigation('/bill/list')}>
             <S.AllBillsTitle>{`전체\n법안 확인하기`}</S.AllBillsTitle>
             <S.Description>{`현재 모든 법안을\n한눈에, 쉽게 확인할 수 있어요`}</S.Description>
           </S.AllBillsSummaryBox>
@@ -29,7 +29,10 @@ export const Main = () => {
               </S.ArrowWrapper>
             </S.LatestBillsLinkBox>
 
-            <S.LatestBillsLinkBox bg={LatestBillsLinkBox}>
+            <S.LatestBillsLinkBox
+              bg={LatestBillsLinkBox}
+              onClick={() => navigation('/bill/list')}
+            >
               <S.LinkText>{`최신\n법안 보러가기`}</S.LinkText>
               <S.ArrowWrapper>
                 <S.ArrowIconWrapper>
@@ -64,5 +67,5 @@ export const Main = () => {
         </S.GridWrapper>
       </S.BottomSection>
     </S.BillOverviewPage>
-  )
-}
+  );
+};

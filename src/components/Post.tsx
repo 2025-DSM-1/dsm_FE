@@ -7,6 +7,7 @@ interface IPostType {
   promulgationDate: string;
   enforcementDate: string;
   status: string;
+  onClick: () => void;
 }
 
 type IStatusType = {
@@ -35,6 +36,7 @@ const Status = ({
 
 export const Post = ({
   title,
+  onClick,
   content,
   promulgationDate,
   enforcementDate,
@@ -65,7 +67,7 @@ export const Post = ({
     }
   }, [status]);
   return (
-    <Container>
+    <Container onClick={onClick}>
       <TitleContainer>
         <Title>{title}</Title>
         <Content>{content}</Content>
