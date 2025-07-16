@@ -1,5 +1,6 @@
 import styled from "@emotion/styled"
 import { LawTitleCard } from "./LawTitleCard"
+import { useDeleteFavoriteBill, useGetFavoriteList } from "../../apis/Favorite";
 
 const favoriteLaws = [
   { lawId: 1, lawTitle: "청소년 보호법 일부개정법률안" },

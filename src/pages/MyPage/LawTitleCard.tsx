@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { Quote } from "../../assets";
 import { useLawDetail } from "../../apis/Law";
+import { useDeleteFavoriteBill } from "../../apis/Favorite";
 import { formatDate } from "../../hooks/formatDate";
 
 interface LawTitleCardProps {
@@ -26,6 +27,7 @@ const data = {
 
 export const LawTitleCard = ({ lawId, lawTitle }: LawTitleCardProps) => {
   // const { data } = useLawDetail(lawId);
+  const { mutate } = useDeleteFavoriteBill();
 
   return (
     <CardContainer>
@@ -43,7 +45,7 @@ export const LawTitleCard = ({ lawId, lawTitle }: LawTitleCardProps) => {
       <ButtonWrapper>
         <Button>알림 받기</Button>
         <Line></Line>
-        <Button>즐겨찾기 해제</Button>
+        <Button onClick={() => mutate(lawId)}>즐겨찾기 해제</Button>
       </ButtonWrapper>
     </CardContainer>
   )

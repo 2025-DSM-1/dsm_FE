@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import instance from "./index";
 
 const path = '/favorites';
@@ -6,7 +6,7 @@ const path = '/favorites';
 // 법안 즐겨찾기 추가
 export const useAddFavoriteBill = () => {
   return useMutation({
-    mutationFn: async (lawId) => {
+    mutationFn: async (lawId: number) => {
       await instance.post(`${path}/${lawId}`);
     },
     onSuccess: () => {
@@ -20,12 +20,15 @@ export const useAddFavoriteBill = () => {
 
 // 법안 즐겨찾기 해제
 export const useDeleteFavoriteBill = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: async (lawId) => {
+    mutationFn: async (lawId: number) => {
       await instance.delete(`${path}/${lawId}`);
     },
     onSuccess: () => {
       console.log("법안 즐겨찾기 해제 성공");
+      queryClient.invalidateQueries({ queryKey: ['FavoriteList'] });
     },
     onError: (error) => {
       console.error(error.message);
