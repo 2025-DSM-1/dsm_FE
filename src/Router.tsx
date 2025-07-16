@@ -24,7 +24,7 @@ export const Router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       {
-        path: 'detail',
+        path: 'detail/:id',
         element: <CardDetail />,
       },
       {

@@ -18,6 +18,7 @@ export const Login = () => {
 
   const handleLoginClick = () => {
     //login api 호출
+    navigate('/bill/main');
   };
 
   const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
