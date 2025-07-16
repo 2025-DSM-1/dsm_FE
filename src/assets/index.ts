@@ -15,3 +15,4 @@ export { default as Banner2 } from './Banner2.png';
 export { default as Banner3 } from './Banner3.png'
 export { default as LatestBillsLinkBox } from './latestBillsBg.png'
 export { default as Quote } from './Quote.png'
+export { default as Question } from './Question.png'

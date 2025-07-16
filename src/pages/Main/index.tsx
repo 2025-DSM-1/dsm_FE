@@ -20,7 +20,7 @@ export const Main = () => {
           </S.AllBillsSummaryBox>
 
           <S.QuickLinks>
-            <S.LatestBillsLinkBox>
+            <S.LatestBillsLinkBox onClick={() => navigation('/bill/quiz')}>
               <S.LinkText>{`법안\n퀴즈 풀러가기`}</S.LinkText>
               <S.ArrowWrapper>
                 <S.ArrowIconWrapper>

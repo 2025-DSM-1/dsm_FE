@@ -4,3 +4,4 @@ export * from './CardDetail';
 export * from './BillList';
 export * from './Main/index'
 export * from './MyPage/index'
+export * from './Quiz/index'
