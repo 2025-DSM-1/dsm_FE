@@ -11,7 +11,7 @@ export const BillList = () => {
       title: '청소년 보호법',
       content: '청소년 유해 매체물 규제 강화',
       promulgationDate: '2024-02-02',
-      enforcementDate: '2024-04-04',
+      resolutionResult: '공포',
       status: '발의',
     },
     {
@@ -19,7 +19,7 @@ export const BillList = () => {
       title: '청소년 보호법',
       content: '청소년 유해 매체물 규제 강화',
       promulgationDate: '2024-02-02',
-      enforcementDate: '2024-04-04',
+      resolutionResult: '공포',
       status: '접수',
     },
     {
@@ -27,7 +27,7 @@ export const BillList = () => {
       title: '청소년 보호법',
       content: '청소년 유해 매체물 규제 강화',
       promulgationDate: '2024-02-02',
-      enforcementDate: '2024-04-04',
+      resolutionResult: '공포',
       status: '심사',
     },
     {
@@ -35,7 +35,7 @@ export const BillList = () => {
       title: '청소년 보호법',
       content: '청소년 유해 매체물 규제 강화',
       promulgationDate: '2024-02-02',
-      enforcementDate: '2024-04-04',
+      resolutionResult: '공포',
       status: '통과',
     },
     {
@@ -43,7 +43,7 @@ export const BillList = () => {
       title: '청소년 보호법',
       content: '청소년 유해 매체물 규제 강화',
       promulgationDate: '2024-02-02',
-      enforcementDate: '2024-04-04',
+      resolutionResult: '공포',
       status: '공포',
     },
     {
@@ -51,7 +51,7 @@ export const BillList = () => {
       title: '청소년 보호법',
       content: '청소년 유해 매체물 규제 강화',
       promulgationDate: '2024-02-02',
-      enforcementDate: '2024-04-04',
+      resolutionResult: '공포',
       status: '시행',
     },
     {
@@ -59,7 +59,7 @@ export const BillList = () => {
       title: '청소년 보호법',
       content: '청소년 유해 매체물 규제 강화',
       promulgationDate: '2024-02-02',
-      enforcementDate: '2024-04-04',
+      resolutionResult: '공포',
       status: '발의',
     },
     {
@@ -67,7 +67,7 @@ export const BillList = () => {
       title: '청소년 보호법',
       content: '청소년 유해 매체물 규제 강화',
       promulgationDate: '2024-02-02',
-      enforcementDate: '2024-04-04',
+      resolutionResult: '공포',
       status: '접수',
     },
     {
@@ -75,7 +75,7 @@ export const BillList = () => {
       title: '청소년 보호법',
       content: '청소년 유해 매체물 규제 강화',
       promulgationDate: '2024-02-02',
-      enforcementDate: '2024-04-04',
+      resolutionResult: '공포',
       status: '심사',
     },
   ]);
@@ -109,10 +109,10 @@ export const BillList = () => {
           </PostCount>
           <div>
             <TabBarContainer>
-              <TabTitle basis="48rem">법안</TabTitle>
-              <TabTitle basis="9.5rem">공포일</TabTitle>
-              <TabTitle basis="9.5rem">시행일</TabTitle>
-              <TabTitle basis="4.4rem">상태</TabTitle>
+              <TabTitle basis="43rem">법안</TabTitle>
+              <TabTitle basis="9.5rem">제안일자</TabTitle>
+              <TabTitle basis="9.5rem">의결결과</TabTitle>
+              <TabTitle basis="8rem">상태</TabTitle>
             </TabBarContainer>
             <PostContainer>
               {datas.slice(0, visibleCount).map((data) => (
@@ -121,7 +121,7 @@ export const BillList = () => {
                   key={data.id}
                   title={data.title}
                   content={data.content}
-                  enforcementDate={data.enforcementDate}
+                  resolutionResult={data.resolutionResult}
                   promulgationDate={data.promulgationDate}
                   status={data.status}
                 />
@@ -184,11 +184,12 @@ const TabBarContainer = styled.div`
   height: 2.5625rem;
   display: flex;
   padding: 0.625rem 2.25rem;
-  background-color: #1d3055;
+  background-color: #000;
 `;
 
 const TabTitle = styled.div<{ basis: string }>`
-  font-size: 1.125rem;
+  font-size: 1rem;
+  font-weight: 400;
   color: #ffffff;
   flex: 0 0 ${({ basis }) => basis};
 `;

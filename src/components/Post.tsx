@@ -5,7 +5,7 @@ interface IPostType {
   title: string;
   content: string;
   promulgationDate: string;
-  enforcementDate: string;
+  resolutionResult: string;
   status: string;
   onClick: () => void;
 }
@@ -39,7 +39,7 @@ export const Post = ({
   onClick,
   content,
   promulgationDate,
-  enforcementDate,
+  resolutionResult,
   status,
 }: IPostType) => {
   const [colorDatas, setColorDatas] = useState<{
@@ -49,23 +49,19 @@ export const Post = ({
   }>({
     borderColor: '#1D3055',
     color: '#1D3055',
-    backgroundColor: '#E6EAF2',
+    backgroundColor: '#ffffff',
   });
+
   useEffect(() => {
-    if (status === '시행') {
+    if (status === '공포') {
       setColorDatas({
-        borderColor: '#1D3055',
+        borderColor: '#ffffff',
         color: '#ffffff',
         backgroundColor: '#1D3055',
       });
-    } else if (status === '접수') {
-      setColorDatas({
-        borderColor: '#1D3055',
-        color: '#1D3055',
-        backgroundColor: '#ffffff',
-      });
     }
   }, [status]);
+
   return (
     <Container onClick={onClick}>
       <TitleContainer>
@@ -73,7 +69,7 @@ export const Post = ({
         <Content>{content}</Content>
       </TitleContainer>
       <Date>{promulgationDate}</Date>
-      <Date>{enforcementDate}</Date>
+      <Result>{resolutionResult}</Result>
       <Status
         color={colorDatas.color}
         borderColor={colorDatas.borderColor}
@@ -96,7 +92,7 @@ const Container = styled.div`
 `;
 
 const TitleContainer = styled.div`
-  flex: 0 0 48rem;
+  flex: 0 0 43rem;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -106,6 +102,13 @@ const Date = styled.div`
   font-size: 16px;
   font-weight: 400;
   flex: 0 0 9.5rem;
+`;
+
+const Result = styled.div`
+  font-size: 16px;
+  font-weight: 400;
+  flex: 0 0 9.5rem;
+  color: #2B75FF;
 `;
 
 const Title = styled.div`
@@ -119,8 +122,8 @@ const Content = styled.div`
 
 const StatusContainer = styled.div<Omit<IStatusType, 'children'>>`
   flex: 0 0 4.4rem;
-  padding: 6px 20px;
-  border-radius: 30px;
+  padding: 8px 20px;
+  border-radius: 6px;
   border: 1px solid ${({ borderColor }) => borderColor};
   background-color: ${({ backgroundColor }) => backgroundColor};
   color: ${({ color }) => color};
