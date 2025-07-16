@@ -4,19 +4,19 @@ import instance from "./index";
 const path = '/favorites';
 
 // 법안 즐겨찾기 추가
-export const useAddFavoriteBill = () => {
+export const useAddFavoriteBill = (lawId: number) => {
   return useMutation({
-    mutationFn: async (lawId: number) => {
+    mutationFn: async () => {
       await instance.post(`${path}/${lawId}`);
     },
     onSuccess: () => {
-      console.log("법안 즐겨찾기 추가 성공");
+      console.log('법안 즐겨찾기 추가 성공');
     },
     onError: (error) => {
       console.error(error.message);
-    }
-  })
-}
+    },
+  });
+};
 
 // 법안 즐겨찾기 해제
 export const useDeleteFavoriteBill = () => {
@@ -32,9 +32,9 @@ export const useDeleteFavoriteBill = () => {
     },
     onError: (error) => {
       console.error(error.message);
-    }
-  })
-}
+    },
+  });
+};
 
 // 즐겨찾기한 법안 조회
 export const useGetFavoriteList = () => {
@@ -42,7 +42,7 @@ export const useGetFavoriteList = () => {
     queryKey: ['FavoriteList'],
     queryFn: async () => {
       const { data } = await instance.get(`${path}`);
-      return data
-    }
-  })
-}
+      return data;
+    },
+  });
+};
