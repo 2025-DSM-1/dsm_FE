@@ -1,21 +1,32 @@
 import styled from '@emotion/styled';
 import { useState, useRef, useEffect } from 'react';
-import { banner, Quotes, Star } from '../assets';
+import { banner, Quotes, Star, Dot } from '../assets';
 import { Button, CommentPost } from '../components';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { formatDate } from '../hooks/formatDate';
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export const CardDetail = () => {
   const chartRef = useRef<any>(null);
+  const chartWrapperRef = useRef<HTMLDivElement>(null);
 
   const [datas] = useState({
     lawId: 1,
     lawTitle: '청소년 보호법 일부개정법률안',
-    lawSummaryContent:
-      '청소년 유해 매체물의 범위를 확대하고, 관련 규제를 강화한다.',
+    lawSummaryContent: [
+      {
+        summaryElement: "청소년 유해 매체물의 범위에 SNS, 1인 미디어 등을 포함한다."
+      },
+      {
+        summaryElement: "유해 매체물에 대한 온라인 플랫폼의 사전 필터링 의무를 강화한다."
+      },
+      {
+        summaryElement: "유해 매체물 유통 시 처벌 수위를 상향 조정한다."
+      },
+    ],
     lawStatus: '발의',
     propositionDate: '2024-05-05',
     backgroundInfo:
@@ -36,7 +47,7 @@ export const CardDetail = () => {
       commentId: 2,
       commentType: 'REBUTTAL',
       voteType: 'DISAGREE',
-      content: '2020년에 국내 대기업 B사가...',
+      content: ' 2020년에 국내 대기업 B사가 동남아 하청공장에서 아동 노동 문제로 국제 NGO에 지적받은 적 있잖아요. 12세 미만 아이들이 하루 10시간 넘게 일했다는 보도도 있었고요. 이런 문제는 자율적 개선으론 한계가 있으니, 법으로라도 강제해야 한다고 생각해요',
       author: '박**',
     },
     {
@@ -136,9 +147,21 @@ export const CardDetail = () => {
     //댓글 작성 api
   };
 
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      setIsScrolled(scrollY > 300);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <AllContainer>
-      <ChartAllContainer>
+      <ChartAllContainer isScrolled={isScrolled}>
         <ChartContentContainer>
           <ChartTitle>해당 법안의 투표 비율 </ChartTitle>
           <Line />
@@ -182,7 +205,7 @@ export const CardDetail = () => {
           <TitleContainer>
             <LawStatus>{datas.lawStatus}</LawStatus>
             <LawTitle>{datas.lawTitle}</LawTitle>
-            <Date>제안일자 | {datas.propositionDate}</Date>
+            <Date>제안일자 | {formatDate(datas.propositionDate)}</Date>
           </TitleContainer>
           <Star onClick={handleStarClick} isClick={isStarClick} />
         </StarContainer>
@@ -192,28 +215,36 @@ export const CardDetail = () => {
           <Smmation>
             <SmmationTitle>법안 요약 정리</SmmationTitle>
             <Line />
-            <SmmationContent>{datas.lawSummaryContent}</SmmationContent>
+            <SummationContent>
+              {datas.lawSummaryContent.map((item, index) => (
+                <SummatationTextWrapper key={index}>
+                  <DotIcon src={Dot} />
+                  <SummatationText>{item.summaryElement}</SummatationText>
+                </SummatationTextWrapper>
+              ))}
+            </SummationContent>
           </Smmation>
           <ExplanationAllContainer>
             <Quotes />
-            <ExplanationContainer>
-              <ExplanationTitle>
-                {datas.lawTitle}에 관한 법률안은 이렇게 생겨났어요!
-              </ExplanationTitle>
-              <ExplanationContent>{datas.backgroundInfo}</ExplanationContent>
-            </ExplanationContainer>
-            <ExplanationContainer>
-              <ExplanationTitle>왜 법이 필요했나?</ExplanationTitle>
-              <ExplanationContent>{datas.example}</ExplanationContent>
-            </ExplanationContainer>
+            <ExplanationWrapper>
+              <ExplanationContainer>
+                <ExplanationTitle>
+                  {datas.lawTitle}에 관한 법률안은 이렇게 생겨났어요!
+                </ExplanationTitle>
+                <ExplanationContent>{datas.backgroundInfo}</ExplanationContent>
+              </ExplanationContainer>
+              <ExplanationContainer>
+                <ExplanationTitle>왜 법이 필요했나?</ExplanationTitle>
+                <ExplanationContent>{datas.example}</ExplanationContent>
+              </ExplanationContainer>
+            </ExplanationWrapper>
           </ExplanationAllContainer>
         </ThoughtAllContainer>
         <ThoughtAllContainer>
           <ThoughtContainer>
             <ThoughtTitle>이 법안, 당신의 생각은?</ThoughtTitle>
             <ThoughtSubTitle>
-              찬성/반대 논리를 참고해 내 의견을 펼치고, 다른 사람들의 생각도
-              읽어보세요.
+              찬성/반대 논리를 참고해 내 의견을 펼치고, 다른 사람들의 생각도 읽어보세요.
             </ThoughtSubTitle>
           </ThoughtContainer>
           <MainThoughtAllContainer>
@@ -222,7 +253,7 @@ export const CardDetail = () => {
               <MainThoughtContentContainer>
                 <Quotes size="20" color="#ffffff" />
                 <MainThoughtContent>
-                  찬성 논리 예시 텍스트...
+                  기업의 인권 환경 실사는 국제 기준에 맞는 책임 경영의 기본입니다. 법적 의무화로 아동 노동, 환경 파괴 같은 문제를 예방해야 합니다.
                 </MainThoughtContent>
               </MainThoughtContentContainer>
             </MainThoughtContainer>
@@ -231,7 +262,7 @@ export const CardDetail = () => {
               <MainThoughtContentContainer>
                 <Quotes size="20" color="#ffffff" />
                 <MainThoughtContent>
-                  반대 논리 예시 텍스트...
+                  지나친 규제는 기업 부담만 늘리고, 특히 중소기업엔 큰 타격입니다. 실질적 효과보다 행정적 부담만 커질 수 있습니다.
                 </MainThoughtContent>
               </MainThoughtContentContainer>
             </MainThoughtContainer>
@@ -250,9 +281,7 @@ export const CardDetail = () => {
               ))}
             </TalkContentContainer>
             <TalkFooterContainer>
-              <TalkFooterMsg>
-                *해당하는 역할을 선택하여 글을 작성해주세요.
-              </TalkFooterMsg>
+              <ThoughtSubTitle>*해당하는 역할을 선택하여 글을 작성해주세요.</ThoughtSubTitle>
               <TalkFooterTabContainer>
                 <TabButton
                   isClick={commentWriteDatas.commentType === 'BASIC'}
@@ -279,12 +308,12 @@ export const CardDetail = () => {
                   value={commentWriteDatas.content}
                   onChange={handleContentChange}
                 />
-                <Button
+                <WriterButton
                   onClick={handleCommentWriting}
                   isBlocked={voteValue === null}
                 >
                   글 등록
-                </Button>
+                </WriterButton>
               </TalkTextContainer>
             </TalkFooterContainer>
           </TalkAllContainer>
@@ -314,7 +343,7 @@ const ChartContentContainer = styled.div`
 
 const ChartTitle = styled.div`
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
 `;
 
 const PercentContainer = styled.div`
@@ -327,15 +356,19 @@ const PercentText = styled.div`
   font-size: 14px;
 `;
 
-const ChartAllContainer = styled.div`
+const ChartAllContainer = styled.div<{ isScrolled: boolean }>`
+  position: fixed;
   padding: 24px;
   border-radius: 12px;
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
-  position: absolute;
   top: 100px;
   right: 140px;
   background-color: #ffffff;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: ${({ isScrolled }) => (isScrolled ? 0.6 : 1)};
+  transform: ${({ isScrolled }) => (isScrolled ? 'scale(0.98)' : 'scale(1)')};
 `;
+
 const ChartContainer = styled.div`
   width: 220px;
   height: 220px;
@@ -343,22 +376,23 @@ const ChartContainer = styled.div`
 `;
 
 const ChartText = styled.div`
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 700;
+  line-height: 24px;
 `;
 
 const ChartTextContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   align-items: center;
   position: absolute;
   top: 90px;
-  left: 80px;
+  left: 74px;
 `;
 
 const ChartTextTitle = styled.div`
-  font-size: 12px;
+  font-size: 14px;
 `;
 
 const ContentContainer = styled.div`
@@ -392,11 +426,11 @@ const TalkAllContainer = styled.div`
 `;
 
 const TalkContentContainer = styled.div`
-  height: 600px;
   width: 100%;
-  border: 1px solid #e7e7e7;
+  border-left: 1px solid #e7e7e7;
+  border-right: 1px solid #e7e7e7;
   background-color: #ffffff;
-  padding: 26px 25px;
+  padding: 26px 25px 36px;
   display: flex;
   flex-direction: column;
   gap: 34px;
@@ -410,7 +444,7 @@ const TalkTitleContainer = styled.div`
   width: 100%;
   padding: 26px 25px;
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 600;
 `;
 
 const TalkTextContainer = styled.div`
@@ -422,7 +456,7 @@ const TalkTextContainer = styled.div`
 
 const TalkTextArea = styled.textarea`
   width: 100%;
-  height: 110px;
+  height: 136px;
   border-radius: 8px;
   border: 1px solid #eeeeee;
   background-color: #f6f6f6;
@@ -434,12 +468,6 @@ const TalkTextArea = styled.textarea`
     font-weight: 400;
     color: #888888;
   }
-`;
-
-const TalkFooterMsg = styled.div`
-  font-size: 18px;
-  color: #a1a1a1;
-  font-weight: 500;
 `;
 
 const TalkFooterTabContainer = styled.div`
@@ -476,15 +504,17 @@ const MainThoughtContentContainer = styled.div`
   max-width: 368px;
 `;
 
-const MainThoughtTitle = styled.div`
+const MainThoughtTitle = styled.p`
   font-size: 22px;
   font-weight: 600;
+  line-height: 28px;
   color: #ffffff;
 `;
 
-const MainThoughtContent = styled.div`
-  font-size: 16px;
-  font-weight: 400;
+const MainThoughtContent = styled.p`
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 28px;
   color: #ffffff;
 `;
 
@@ -510,7 +540,7 @@ const ThoughtTitle = styled.div`
 `;
 
 const ThoughtSubTitle = styled.div`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 400;
   color: #a49d9d;
 `;
@@ -524,6 +554,7 @@ const ExplanationAllContainer = styled.div`
 const ExplanationContent = styled.div`
   font-size: 16px;
   font-weight: 400;
+  line-height: 28px;
 `;
 
 const ExplanationTitle = styled.div`
@@ -537,11 +568,21 @@ const ExplanationContainer = styled.div`
   gap: 20px;
 `;
 
-const SmmationContent = styled.div`
-  font-size: 14px;
-  font-weight: 400;
-  color: #000000;
+const SummationContent = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
+
+const SummatationTextWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`
+
+const SummatationText = styled.p`
+  font-size: 14px;
+  line-height: 30px;
+`
 
 const SmmationTitle = styled.div`
   font-size: 18px;
@@ -562,7 +603,7 @@ const Smmation = styled.div`
   padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 10px;
 `;
 
 const StarContainer = styled.div`
@@ -574,9 +615,10 @@ const StarContainer = styled.div`
 
 const BannerContainer = styled.div`
   width: 100%;
-  height: 297px;
+  height: 320px;
   display: flex;
-  align-items: center;
+  align-items: end;
+  padding: 53px 0;
 `;
 
 const Banner = styled.img`
@@ -585,6 +627,7 @@ const Banner = styled.img`
   position: absolute;
   top: 68px;
   left: 0;
+  height: 320px;
 `;
 
 const TitleContainer = styled.div`
@@ -617,3 +660,23 @@ const LawTitle = styled.div`
   font-weight: 700;
   color: #ffffff;
 `;
+
+const ExplanationWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+`
+
+const DotIcon = styled.img`
+  width: 12px;
+  height: 12px;
+`
+
+const WriterButton = styled.button<{ isBlocked: boolean }>`
+  opacity: ${({ isBlocked }) => (isBlocked ? 0.5 : 1)};
+  pointer-events: ${({ isBlocked }) => (isBlocked ? 'none' : 'cursor')};
+  padding: 12px 24px;
+  border-radius: 8px;
+  background-color: #1D3055;
+  color: #fff;
+`
