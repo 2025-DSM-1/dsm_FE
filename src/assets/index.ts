@@ -8,3 +8,4 @@ export * from './Passing';
 export * from './Promulgate';
 export * from './Receipt';
 export * from './Sentence';
+export * from './Quotes';

@@ -7,6 +7,7 @@ interface IButtonType {
   width?: string;
   borderColor?: string;
   onClick: () => void;
+  isBlocked?: boolean;
 }
 
 export const Button = ({
@@ -16,9 +17,11 @@ export const Button = ({
   borderColor,
   color = '#ffffff',
   onClick,
+  isBlocked,
 }: IButtonType) => {
   return (
     <ButtonContainer
+      isBlocked={isBlocked}
       onClick={onClick}
       borderColor={borderColor}
       width={width}
@@ -30,6 +33,8 @@ export const Button = ({
   );
 };
 const ButtonContainer = styled.button<Omit<IButtonType, 'children'>>`
+  opacity: ${({ isBlocked }) => (isBlocked ? 0.5 : 1)};
+  pointer-events: ${({ isBlocked }) => (isBlocked ? 'none' : 'cursor')};
   width: ${({ width }) => width};
   height: 56px;
   padding: 16px 24px;
