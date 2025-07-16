@@ -24,3 +24,14 @@ export const useLawDetail = (lawId: number) => {
     }
   })
 }
+
+//찬반 논리 조회
+export const useGetVoteArguments = (lawId: number) => {
+  return useQuery({
+    queryKey: ['VoteArguments'],
+    queryFn: async () => {
+      const { data } = await instance.get(`${path}/${lawId}/logic`);
+      return data;
+    }
+  })
+}
