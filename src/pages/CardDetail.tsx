@@ -12,7 +12,6 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 export const CardDetail = () => {
   const chartRef = useRef<any>(null);
-  const chartWrapperRef = useRef<HTMLDivElement>(null);
 
   const [datas] = useState({
     lawId: 1,
@@ -504,7 +503,7 @@ const TalkFooterContainer = styled.div`
 const ThoughtAllContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 56px;
 `;
 
 const MainThoughtAllContainer = styled.div`
@@ -640,7 +639,7 @@ const BannerContainer = styled.div`
   height: 320px;
   display: flex;
   align-items: end;
-  padding: 53px 0;
+  padding: 38px 0;
 `;
 
 const Banner = styled.img`
