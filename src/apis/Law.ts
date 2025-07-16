@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import instance from "./index";
+import { useQuery } from '@tanstack/react-query';
+import instance from './index';
 
 const path = '/laws';
 
@@ -20,7 +20,7 @@ export const useLawList = () => {
     queryFn: async () => {
       const { data } = await instance.get(path);
       return data;
-    }
+    },
   });
 };
 
@@ -32,17 +32,17 @@ export const useLawDetail = (lawId: number) => {
       const { data } = await instance.get(`${path}/${lawId}`);
       return data;
     },
-    enabled: !!lawId
-  })
-}
+    enabled: !!lawId,
+  });
+};
 
 //찬반 논리 조회
 export const useGetVoteArguments = (lawId: number) => {
   return useQuery({
     queryKey: ['VoteArguments'],
     queryFn: async () => {
-      const { data } = await instance.get(`${path}/${lawId}/logic`);
+      const { data } = await instance.get(`${path}/logic/${lawId}`);
       return data;
-    }
-  })
-}
+    },
+  });
+};

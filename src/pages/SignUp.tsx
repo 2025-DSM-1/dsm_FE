@@ -75,25 +75,30 @@ export const SignUp = () => {
       { email: datas.email },
       {
         onSuccess: () => {
-          let time = 150;
-          setDelayTime(time);
-          setIsEmailVerified(false); // 새로 요청 시 인증 다시 해야 함
+          codeApi.mutate(
+            { email: datas.email },
+            {
+              onSuccess: () => {
+                let time = 150;
+                setDelayTime(time);
+                setIsEmailVerified(false);
 
-          if (timerRef.current) {
-            clearInterval(timerRef.current);
-          }
+                if (timerRef.current) {
+                  clearInterval(timerRef.current);
+                }
 
-          timerRef.current = setInterval(() => {
-            setDelayTime((prev) => {
-              if (prev <= 1 && timerRef.current) {
-                clearInterval(timerRef.current);
-                return 0;
-              }
-              return prev - 1;
-            });
-          }, 1000);
-
-          codeApi.mutate({ email: datas.email });
+                timerRef.current = setInterval(() => {
+                  setDelayTime((prev) => {
+                    if (prev <= 1 && timerRef.current) {
+                      clearInterval(timerRef.current);
+                      return 0;
+                    }
+                    return prev - 1;
+                  });
+                }, 1000);
+              },
+            }
+          );
         },
         onError: (error) => {
           console.error(error.message);
