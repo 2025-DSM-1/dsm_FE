@@ -2,11 +2,27 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import Quote from "../../assets/Quote.png";
 
-export const BillCard = () => {
+interface BillCardProps {
+  law: {
+    lawId: number,
+    lawTitle: string;
+    lawContent: string;
+    promulgationDate: string;
+    resolutionResult: string;
+    lawSerialNumber: number;
+  };
+}
+
+export const BillCard = ({ law }: BillCardProps) => {
   const [isFront, setIsFront] = useState<boolean>(true);
 
   const handleClick = () => {
     setIsFront(!isFront);
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
   };
 
   return (
@@ -15,23 +31,20 @@ export const BillCard = () => {
         <CardFaceFront>
           <TitleSection>
             <QuoteIcon src={Quote} alt="Quote" />
-            <LawTitleText>방송 3법 개정안</LawTitleText>
+            <LawTitleText>{law.lawTitle}</LawTitleText>
           </TitleSection>
           <BottomSection>
-            <StatusTag>시행</StatusTag>
-            <DateLabel>2025년 7월 11일</DateLabel>
+            <StatusTag>{law.resolutionResult}</StatusTag>
+            <DateLabel>{formatDate(law.promulgationDate)}</DateLabel>
           </BottomSection>
         </CardFaceFront>
 
         <CardFaceBack>
           <CardHeader>
             <LabelText>의안번호</LabelText>
-            <NumberText>2211424</NumberText>
+            <NumberText>{law.lawSerialNumber}</NumberText>
           </CardHeader>
-          <DescriptionText>
-            방송사의 독립성과 공정성을 높이기 위해, 방송통신위원회와 공영방송 이사 선출 방식을 바꾸는 법안이에요.
-            정치권의 개입을 줄이고, 시민 참여를 늘리는 것이 핵심이에요.
-          </DescriptionText>
+          <DescriptionText>{law.lawContent}</DescriptionText>
         </CardFaceBack>
       </CardInner>
     </CardWrapper>
