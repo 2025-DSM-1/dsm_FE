@@ -182,7 +182,7 @@ export const CardDetail = () => {
           <TitleContainer>
             <LawStatus>{datas.lawStatus}</LawStatus>
             <LawTitle>{datas.lawTitle}</LawTitle>
-            <Date>발의일 | {datas.propositionDate}</Date>
+            <Date>제안일자 | {datas.propositionDate}</Date>
           </TitleContainer>
           <Star onClick={handleStarClick} isClick={isStarClick} />
         </StarContainer>
