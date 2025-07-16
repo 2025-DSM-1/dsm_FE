@@ -58,14 +58,16 @@ export const Procedure = () => {
 };
 
 const AllContainer = styled.div`
+  width: 100%;
   display: flex;
-  flex-wrap: wrap;
-  gap: 72px 32px;
+  justify-content: space-between;
   align-items: center;
+  padding: 0 0 20px;
 `;
 
 const Title = styled.div`
   font-size: 16px;
+  font-weight: 600;
 `;
 
 const Content = styled.div`
