@@ -6,6 +6,7 @@ import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { formatDate } from '../hooks/formatDate';
 
+
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -108,9 +109,13 @@ export const CardDetail = () => {
   };
 
   const [isStarClick, setIsStarClick] = useState<boolean>(false);
+  const [animateStar, setAnimateStar] = useState(false);
 
   const handleStarClick = () => {
-    setIsStarClick(!isStarClick);
+    setIsStarClick((prev) => !prev);
+    setAnimateStar(true);
+    setTimeout(() => setAnimateStar(false), 400);
+
     if (isStarClick) {
       //즐겨찾기 api
     }
@@ -149,10 +154,14 @@ export const CardDetail = () => {
 
   const [isScrolled, setIsScrolled] = useState(false);
 
+  //스크롤 차트 애니메이션
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      setIsScrolled(scrollY > 300);
+      setIsScrolled((prev) => {
+        const next = scrollY > 300;
+        return prev !== next ? next : prev;
+      });
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -207,7 +216,7 @@ export const CardDetail = () => {
             <LawTitle>{datas.lawTitle}</LawTitle>
             <Date>제안일자 | {formatDate(datas.propositionDate)}</Date>
           </TitleContainer>
-          <Star onClick={handleStarClick} isClick={isStarClick} />
+          <Star onClick={handleStarClick} isClick={isStarClick} animate={animateStar} />
         </StarContainer>
       </BannerContainer>
       <ContentContainer>
@@ -417,6 +426,12 @@ const TabButton = styled.button<{ isClick: boolean }>`
   align-items: center;
   background-color: ${({ isClick }) => (isClick ? '#1D3055' : '#ffffff')};
   color: ${({ isClick }) => (isClick ? '#ffffff' : '#1D3055')};
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+  &:hover {
+    background-color: ${({ isClick }) => (isClick ? '#0b1b38' : '#ececec')};
+    cursor: pointer;
+  }
 `;
 
 const TalkAllContainer = styled.div`
@@ -526,6 +541,13 @@ const MainThoughtContainer = styled.div`
   flex-direction: column;
   gap: 36px;
   width: 100%;
+  
+  &:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  }
+  cursor: pointer;
 `;
 
 const ThoughtContainer = styled.div`
@@ -679,4 +701,9 @@ const WriterButton = styled.button<{ isBlocked: boolean }>`
   border-radius: 8px;
   background-color: #1D3055;
   color: #fff;
+
+  &:hover {
+    background-color: #0e253e;
+    cursor: ${({ isBlocked }) => (isBlocked ? 'default' : 'pointer')};
+  }
 `

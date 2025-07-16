@@ -1,12 +1,14 @@
 interface IStarType {
   isClick?: boolean;
+  animate?: boolean;
   onClick?: () => void;
 }
 
-export const Star = ({ isClick, onClick }: IStarType) => {
+export const Star = ({ isClick, onClick, animate = false }: IStarType) => {
   return (
     <svg
       onClick={onClick}
+      className={animate ? 'animate-star' : ''}
       width="25"
       height="25"
       viewBox="0 0 25 25"
