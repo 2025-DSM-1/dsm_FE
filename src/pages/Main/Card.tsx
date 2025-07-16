@@ -1,8 +1,39 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
 import Quote from "../../assets/Quote.png";
+import { formatDate } from "../../hooks/formatDate";
+import { useLawDetail } from "../../apis/Law";
 
-export const BillCard = () => {
+interface BillCardProps {
+  law: {
+    lawId: number,
+    lawTitle: string;
+    lawContent: string;
+    promulgationDate: string;
+    resolutionResult: string;
+    lawSerialNumber: number;
+  };
+}
+
+const data = {
+  lawId: 2,
+  lawTitle: "개인정보 보호법 일부개정법률안",
+  lawSummaryContent: [
+    { summaryElement: "개인정보의 자동 수집 범위를 명확히 정의한다." },
+    { summaryElement: "이용자의 동의 없는 3자 제공 시 법적 제재를 강화한다." },
+    { summaryElement: "개인정보 유출 시 플랫폼의 즉시 신고 의무를 부과한다." }
+  ],
+  lawStatus: "위원회 심사",
+  propositionDate: "2024-04-15",
+  backgroundInfo:
+    "데이터 유출 사고가 빈번히 발생하면서 개인정보 보호에 대한 사회적 요구가 증가하고 있다. 특히 플랫폼 기업의 책임을 강화하자는 요구가 많아 법 개정이 추진되었다.",
+  example:
+    "예를 들어, SNS 기업이 수집한 위치정보를 이용자 동의 없이 광고업체에 제공한 사례가 논란이 되었고, 이를 규제하기 위한 조치이다."
+}
+
+export const BillCard = ({ law }: BillCardProps) => {
+  // const { data } = useLawDetail(lawId);
+
   const [isFront, setIsFront] = useState<boolean>(true);
 
   const handleClick = () => {
@@ -15,23 +46,20 @@ export const BillCard = () => {
         <CardFaceFront>
           <TitleSection>
             <QuoteIcon src={Quote} alt="Quote" />
-            <LawTitleText>방송 3법 개정안</LawTitleText>
+            <LawTitleText>{law.lawTitle}</LawTitleText>
           </TitleSection>
           <BottomSection>
-            <StatusTag>시행</StatusTag>
-            <DateLabel>2025년 7월 11일</DateLabel>
+            <StatusTag>{data.lawStatus}</StatusTag>
+            <DateLabel>{formatDate(data.propositionDate)}</DateLabel>
           </BottomSection>
         </CardFaceFront>
 
         <CardFaceBack>
           <CardHeader>
             <LabelText>의안번호</LabelText>
-            <NumberText>2211424</NumberText>
+            <NumberText>{law.lawSerialNumber}</NumberText>
           </CardHeader>
-          <DescriptionText>
-            방송사의 독립성과 공정성을 높이기 위해, 방송통신위원회와 공영방송 이사 선출 방식을 바꾸는 법안이에요.
-            정치권의 개입을 줄이고, 시민 참여를 늘리는 것이 핵심이에요.
-          </DescriptionText>
+          <DescriptionText>{law.lawContent}</DescriptionText>
         </CardFaceBack>
       </CardInner>
     </CardWrapper>

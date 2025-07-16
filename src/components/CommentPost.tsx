@@ -61,6 +61,7 @@ const ContentContainer = styled.div`
 const Content = styled.div`
   font-size: 16px;
   font-weight: 400;
+  line-height: 28px;
 `;
 
 const TitleContainer = styled.div`
@@ -91,6 +92,7 @@ const CommentTitle = styled.div<{ isAgree: boolean }>`
 const Writer = styled.div`
   font-size: 16px;
   color: #a0a0a0;
+  line-height: 28px;
 `;
 
 const Dot = styled.div<{ isAgree: boolean }>`

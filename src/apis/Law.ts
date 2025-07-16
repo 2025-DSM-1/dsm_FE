@@ -3,6 +3,16 @@ import instance from "./index";
 
 const path = '/laws';
 
+export interface LawDetailType {
+  lawId: number;
+  lawTitle: string;
+  lawSummaryContent: { summaryElement: string }[];
+  lawStatus: string;
+  propositionDate: string;
+  backgroundInfo: string;
+  example: string;
+}
+
 // 법안 전체 조회
 export const useLawList = () => {
   return useQuery({
@@ -16,12 +26,13 @@ export const useLawList = () => {
 
 // 법안 상세 보기
 export const useLawDetail = (lawId: number) => {
-  return useQuery({
+  return useQuery<LawDetailType>({
     queryKey: ['LawDetail'],
     queryFn: async () => {
       const { data } = await instance.get(`${path}/${lawId}`);
       return data;
-    }
+    },
+    enabled: !!lawId
   })
 }
 

@@ -7,6 +7,80 @@ import { useLawList } from '../apis/Law';
 
 export const BillList = () => {
   const { data, isLoading, error } = useLawList();
+//   const [datas] = useState([
+//     {
+//       id: 1,
+//       title: '청소년 보호법',
+//       content: '청소년 유해 매체물 규제 강화',
+//       promulgationDate: '2024-02-02',
+//       resolutionResult: '공포',
+//       status: '발의',
+//     },
+//     {
+//       id: 2,
+//       title: '청소년 보호법',
+//       content: '청소년 유해 매체물 규제 강화',
+//       promulgationDate: '2024-02-02',
+//       resolutionResult: '공포',
+//       status: '접수',
+//     },
+//     {
+//       id: 3,
+//       title: '청소년 보호법',
+//       content: '청소년 유해 매체물 규제 강화',
+//       promulgationDate: '2024-02-02',
+//       resolutionResult: '공포',
+//       status: '심사',
+//     },
+//     {
+//       id: 4,
+//       title: '청소년 보호법',
+//       content: '청소년 유해 매체물 규제 강화',
+//       promulgationDate: '2024-02-02',
+//       resolutionResult: '공포',
+//       status: '통과',
+//     },
+//     {
+//       id: 5,
+//       title: '청소년 보호법',
+//       content: '청소년 유해 매체물 규제 강화',
+//       promulgationDate: '2024-02-02',
+//       resolutionResult: '공포',
+//       status: '공포',
+//     },
+//     {
+//       id: 6,
+//       title: '청소년 보호법',
+//       content: '청소년 유해 매체물 규제 강화',
+//       promulgationDate: '2024-02-02',
+//       resolutionResult: '공포',
+//       status: '시행',
+//     },
+//     {
+//       id: 7,
+//       title: '청소년 보호법',
+//       content: '청소년 유해 매체물 규제 강화',
+//       promulgationDate: '2024-02-02',
+//       resolutionResult: '공포',
+//       status: '발의',
+//     },
+//     {
+//       id: 8,
+//       title: '청소년 보호법',
+//       content: '청소년 유해 매체물 규제 강화',
+//       promulgationDate: '2024-02-02',
+//       resolutionResult: '공포',
+//       status: '접수',
+//     },
+//     {
+//       id: 9,
+//       title: '청소년 보호법',
+//       content: '청소년 유해 매체물 규제 강화',
+//       promulgationDate: '2024-02-02',
+//       resolutionResult: '공포',
+//       status: '심사',
+//     },
+//   ]);
   const navigate = useNavigate();
   const [visibleCount, setVisibleCount] = useState(20);
 
@@ -38,10 +112,10 @@ export const BillList = () => {
           </PostCount>
           <div>
             <TabBarContainer>
-              <TabTitle basis="48rem">법안</TabTitle>
-              <TabTitle basis="9.5rem">공포일</TabTitle>
-              <TabTitle basis="9.5rem">시행일</TabTitle>
-              <TabTitle basis="4.4rem">상태</TabTitle>
+              <TabTitle basis="43rem">법안</TabTitle>
+              <TabTitle basis="9.5rem">제안일자</TabTitle>
+              <TabTitle basis="9.5rem">의결결과</TabTitle>
+              <TabTitle basis="8rem">상태</TabTitle>
             </TabBarContainer>
             <PostContainer>
               {data?.list?.slice(0, visibleCount).map((law) => (
@@ -50,7 +124,7 @@ export const BillList = () => {
                   key={law.id}
                   title={law.title}
                   content={law.content}
-                  enforcementDate={law.enforcementDate}
+                  resolutionResult={law.resolutionResult}
                   promulgationDate={law.promulgationDate}
                   status={law.status}
                 />
@@ -73,7 +147,6 @@ export const BillList = () => {
   );
 };
 
-// 스타일은 그대로 유지
 const ButtonContainer = styled.div`
   width: 100%;
   display: flex;
@@ -113,11 +186,12 @@ const TabBarContainer = styled.div`
   height: 2.5625rem;
   display: flex;
   padding: 0.625rem 2.25rem;
-  background-color: #1d3055;
+  background-color: #000;
 `;
 
 const TabTitle = styled.div<{ basis: string }>`
-  font-size: 1.125rem;
+  font-size: 1rem;
+  font-weight: 400;
   color: #ffffff;
   flex: 0 0 ${({ basis }) => basis};
 `;
