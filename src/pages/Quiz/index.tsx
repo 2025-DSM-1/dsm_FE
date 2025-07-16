@@ -1,6 +1,8 @@
 import * as S from "./style"
 import { Question, Check, X } from "../../assets"
 import { useState } from "react"
+import Modal from "../../components/Modal"
+import { CompleteModal } from "./CompleteModal"
 
 const data = [
   {
@@ -50,6 +52,9 @@ export const Quiz = () => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [correctCount, setCorrectCount] = useState(0)
 
   const currentQuestion = data[currentIndex];
   const progress = data.length > 1
@@ -60,6 +65,8 @@ export const Quiz = () => {
     if (selectedOption === null) return alert("선택지를 골라주세요!");
 
     const isAnswerCorrect = selectedOption === currentQuestion.answer;
+    if (isAnswerCorrect) setCorrectCount((prev) => prev + 1)
+
     setIsCorrect(isAnswerCorrect);
     setShowAnswer(true);
   };
@@ -71,7 +78,7 @@ export const Quiz = () => {
       setShowAnswer(false);
       setIsCorrect(null);
     } else {
-      // 마지막 문제 처리
+      setIsModalOpen(true);
     }
   };
 
@@ -133,6 +140,16 @@ export const Quiz = () => {
           </S.SubmitButton>
         </S.QuizSection>
       </S.QuizContent>
+
+      {isModalOpen && (
+        <Modal onClose={() => setIsModalOpen(false)}>
+          <CompleteModal
+            score={correctCount}
+            total={data.length}
+            onClose={() => setIsModalOpen(false)}
+          />
+        </Modal>
+      )}
     </S.Container>
   )
 }
