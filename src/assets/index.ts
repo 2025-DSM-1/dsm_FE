@@ -9,7 +9,7 @@ export * from './Passing';
 export * from './Promulgate';
 export * from './Receipt';
 export * from './Sentence';
-
+export * from './Quotes';
 export { default as Banner1 } from './Banner1.png';
 export { default as Banner2 } from './Banner2.png';
 export { default as Banner3 } from './Banner3.png'
