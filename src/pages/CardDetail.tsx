@@ -4,24 +4,55 @@ import { banner, Quotes, Star } from '../assets';
 import { Button, CommentPost } from '../components';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { useGetVoteArguments, useLawDetail } from '../apis/Law';
+import { useParams } from 'react-router-dom';
+import { useGetVoteGraph, useVoteOnBill } from '../apis/Vote';
+import { useAddVoteComment, useGetVoteComment } from '../apis/Comment';
+import { useAddFavoriteBill, useDeleteFavoriteBill } from '../apis/Favorite';
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export const CardDetail = () => {
   const chartRef = useRef<any>(null);
+  const { id } = useParams<{ id: string }>();
+  const lawId = id ? Number(id) : 0;
 
-  const [datas] = useState({
-    lawId: 1,
-    lawTitle: '청소년 보호법 일부개정법률안',
-    lawSummaryContent:
-      '청소년 유해 매체물의 범위를 확대하고, 관련 규제를 강화한다.',
-    lawStatus: '발의',
-    propositionDate: '2024-05-05',
-    backgroundInfo:
-      '최근 온라인 플랫폼을 통해 청소년에게 노출되는 유해 매체물의 범위가 다양해지고 있는 상황에서, 기존 법령이 이를 충분히 규제하지 못한다는 지적이 제기되었다. 이에 따라 법적 정의를 확장하고, 실효성 있는 제재 수단을 마련하고자 개정이 추진되었다.',
-    example:
-      '예를 들어, BJ의 음란 방송이나 자극적인 숏폼 콘텐츠 등이 청소년에게 쉽게 노출되고 있으나 현재 법령으로는 이를 제재하기 어렵다. 개정안은 이를 유해 매체물로 명확히 규정하고, 플랫폼 사업자에게 필터링 의무를 부과하도록 하고 있다.',
+  //lawdetail
+  const { data: lawDetail } = useLawDetail(lawId);
+
+  //getVoteArguments
+  const { data: voteArguments } = useGetVoteArguments(lawId);
+
+  //voteOnBill
+  const voteOnBillApi = useVoteOnBill(lawId);
+
+  //voteGraph
+  const { data: voteGraphData } = useGetVoteGraph(lawId);
+  const voteGraph = voteGraphData || { agree: 0, disagree: 0, totalVote: 0 };
+
+  //commentWrite
+  const commentWriteApi = useAddVoteComment(lawId);
+
+  //commentGet
+  const { data: commentGetData, refetch: refetchComments } =
+    useGetVoteComment();
+  const comments = commentGetData || [];
+
+  //starAdd
+  const favoriteAddApi = useAddFavoriteBill(lawId);
+
+  //starDel
+  const favoriteDelApi = useDeleteFavoriteBill(lawId);
+
+  const [voteDatas] = useState<{
+    agree: number;
+    disagree: number;
+    totalVote: number;
+  }>({
+    agree: 30,
+    disagree: 70,
+    totalVote: 245,
   });
 
   const [commentDatas] = useState([
@@ -51,16 +82,6 @@ export const CardDetail = () => {
   const [commentWriteDatas, setCommentWriteDatas] = useState({
     commentType: 'BASIC' as 'BASIC' | 'ADDITIONAL' | 'REBUTTAL',
     content: '',
-  });
-
-  const [voteDatas] = useState<{
-    agree: number;
-    disagree: number;
-    totalVote: number;
-  }>({
-    agree: 30,
-    disagree: 70,
-    totalVote: 245,
   });
 
   // 투표 값 상태 추가
@@ -101,13 +122,10 @@ export const CardDetail = () => {
   const handleStarClick = () => {
     setIsStarClick(!isStarClick);
     if (isStarClick) {
-      //즐겨찾기 api
+      favoriteDelApi.mutate();
+    } else if (!isStarClick) {
+      favoriteAddApi.mutate();
     }
-  };
-
-  // 투표 선택 핸들러
-  const handleVoteClick = (vote: 'AGREE' | 'DISAGREE') => {
-    setVoteValue(vote);
   };
 
   const handleTabClick = (type: 'BASIC' | 'ADDITIONAL' | 'REBUTTAL') => {
@@ -132,8 +150,30 @@ export const CardDetail = () => {
     if (voteValue === null) {
       alert('의견을 입력하려면 찬반 투표를 진행해주세요');
       return;
+    } else {
+      commentWriteApi.mutate(
+        {
+          commentType: commentWriteDatas.commentType,
+          content: commentWriteDatas.content,
+        },
+        {
+          onSuccess: () => {
+            refetchComments();
+            setCommentWriteDatas((prev) => ({ ...prev, content: '' }));
+          },
+        }
+      );
     }
-    //댓글 작성 api
+  };
+
+  const handleAgreeClick = () => {
+    setVoteValue('AGREE');
+    voteOnBillApi.mutate({ voteType: 'AGREE' }); //찬성 투표 api
+  };
+
+  const handleDisAgreeClick = () => {
+    setVoteValue('DISAGREE');
+    voteOnBillApi.mutate({ voteType: 'DISAGREE' }); //반대 투표 api
   };
 
   return (
@@ -161,7 +201,7 @@ export const CardDetail = () => {
               backgroundColor={voteValue === 'AGREE' ? '#1D3055' : '#ffffff'}
               color={voteValue === 'AGREE' ? '#ffffff' : '#1D3055'}
               borderColor="#1D3055"
-              onClick={() => handleVoteClick('AGREE')}
+              onClick={handleAgreeClick}
             >
               법안 찬성
             </Button>
@@ -169,7 +209,7 @@ export const CardDetail = () => {
               backgroundColor={voteValue === 'DISAGREE' ? '#1D3055' : '#ffffff'}
               color={voteValue === 'DISAGREE' ? '#ffffff' : '#1D3055'}
               borderColor="#1D3055"
-              onClick={() => handleVoteClick('DISAGREE')}
+              onClick={handleDisAgreeClick}
             >
               법안 반대
             </Button>
@@ -180,9 +220,9 @@ export const CardDetail = () => {
       <BannerContainer>
         <StarContainer>
           <TitleContainer>
-            <LawStatus>{datas.lawStatus}</LawStatus>
-            <LawTitle>{datas.lawTitle}</LawTitle>
-            <Date>제안일자 | {datas.propositionDate}</Date>
+            <LawStatus>{lawDetail?.lawStatus || '정보 없음'}</LawStatus>
+            <LawTitle>{lawDetail?.lawTitle || '제목 없음'}</LawTitle>
+            <Date>제안일자 | {lawDetail?.propositionDate || '정보 없음'}</Date>
           </TitleContainer>
           <Star onClick={handleStarClick} isClick={isStarClick} />
         </StarContainer>
@@ -192,19 +232,27 @@ export const CardDetail = () => {
           <Smmation>
             <SmmationTitle>법안 요약 정리</SmmationTitle>
             <Line />
-            <SmmationContent>{datas.lawSummaryContent}</SmmationContent>
+            <SmmationContent>
+              {lawDetail?.lawSummaryContent || '내용 없음'}
+            </SmmationContent>
           </Smmation>
           <ExplanationAllContainer>
             <Quotes />
             <ExplanationContainer>
               <ExplanationTitle>
-                {datas.lawTitle}에 관한 법률안은 이렇게 생겨났어요!
+                {lawDetail?.lawTitle
+                  ? `${lawDetail.lawTitle}에 관한 법률안은 이렇게 생겨났어요!`
+                  : '법률안 정보가 없습니다'}
               </ExplanationTitle>
-              <ExplanationContent>{datas.backgroundInfo}</ExplanationContent>
+              <ExplanationContent>
+                {lawDetail?.backgroundInfo || '정보 없음'}
+              </ExplanationContent>
             </ExplanationContainer>
             <ExplanationContainer>
               <ExplanationTitle>왜 법이 필요했나?</ExplanationTitle>
-              <ExplanationContent>{datas.example}</ExplanationContent>
+              <ExplanationContent>
+                {lawDetail?.example || '정보 없음'}
+              </ExplanationContent>
             </ExplanationContainer>
           </ExplanationAllContainer>
         </ThoughtAllContainer>
@@ -222,7 +270,7 @@ export const CardDetail = () => {
               <MainThoughtContentContainer>
                 <Quotes size="20" color="#ffffff" />
                 <MainThoughtContent>
-                  찬성 논리 예시 텍스트...
+                  {voteArguments?.agreeLogic || '찬성 논리 정보 없음'}
                 </MainThoughtContent>
               </MainThoughtContentContainer>
             </MainThoughtContainer>
@@ -231,7 +279,7 @@ export const CardDetail = () => {
               <MainThoughtContentContainer>
                 <Quotes size="20" color="#ffffff" />
                 <MainThoughtContent>
-                  반대 논리 예시 텍스트...
+                  {voteArguments?.disagreeLogic || '반대 논리 정보 없음'}
                 </MainThoughtContent>
               </MainThoughtContentContainer>
             </MainThoughtContainer>

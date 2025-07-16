@@ -3,84 +3,11 @@ import { Button, Procedure } from '../components';
 import { Post } from '../components/Post';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLawList } from '../apis/Law';
 
 export const BillList = () => {
-  const [datas] = useState([
-    {
-      id: 1,
-      title: '청소년 보호법',
-      content: '청소년 유해 매체물 규제 강화',
-      promulgationDate: '2024-02-02',
-      enforcementDate: '2024-04-04',
-      status: '발의',
-    },
-    {
-      id: 2,
-      title: '청소년 보호법',
-      content: '청소년 유해 매체물 규제 강화',
-      promulgationDate: '2024-02-02',
-      enforcementDate: '2024-04-04',
-      status: '접수',
-    },
-    {
-      id: 3,
-      title: '청소년 보호법',
-      content: '청소년 유해 매체물 규제 강화',
-      promulgationDate: '2024-02-02',
-      enforcementDate: '2024-04-04',
-      status: '심사',
-    },
-    {
-      id: 4,
-      title: '청소년 보호법',
-      content: '청소년 유해 매체물 규제 강화',
-      promulgationDate: '2024-02-02',
-      enforcementDate: '2024-04-04',
-      status: '통과',
-    },
-    {
-      id: 5,
-      title: '청소년 보호법',
-      content: '청소년 유해 매체물 규제 강화',
-      promulgationDate: '2024-02-02',
-      enforcementDate: '2024-04-04',
-      status: '공포',
-    },
-    {
-      id: 6,
-      title: '청소년 보호법',
-      content: '청소년 유해 매체물 규제 강화',
-      promulgationDate: '2024-02-02',
-      enforcementDate: '2024-04-04',
-      status: '시행',
-    },
-    {
-      id: 7,
-      title: '청소년 보호법',
-      content: '청소년 유해 매체물 규제 강화',
-      promulgationDate: '2024-02-02',
-      enforcementDate: '2024-04-04',
-      status: '발의',
-    },
-    {
-      id: 8,
-      title: '청소년 보호법',
-      content: '청소년 유해 매체물 규제 강화',
-      promulgationDate: '2024-02-02',
-      enforcementDate: '2024-04-04',
-      status: '접수',
-    },
-    {
-      id: 9,
-      title: '청소년 보호법',
-      content: '청소년 유해 매체물 규제 강화',
-      promulgationDate: '2024-02-02',
-      enforcementDate: '2024-04-04',
-      status: '심사',
-    },
-  ]);
+  const { data, isLoading, error } = useLawList();
   const navigate = useNavigate();
-
   const [visibleCount, setVisibleCount] = useState(20);
 
   const handleMore = () => {
@@ -90,6 +17,9 @@ export const BillList = () => {
   const handlePostClick = (id: number) => {
     navigate(`/bill/detail/${id}`);
   };
+
+  if (isLoading) return <div>로딩 중...</div>;
+  if (error || !data) return <div>에러가 발생했습니다.</div>;
 
   return (
     <Container>
@@ -104,8 +34,7 @@ export const BillList = () => {
         <PostCountContainer>
           <PostCount>
             총{' '}
-            <PostCount style={{ fontWeight: '600' }}>{datas.length}</PostCount>
-            개
+            <PostCount style={{ fontWeight: '600' }}>{data.length}</PostCount>개
           </PostCount>
           <div>
             <TabBarContainer>
@@ -115,28 +44,28 @@ export const BillList = () => {
               <TabTitle basis="4.4rem">상태</TabTitle>
             </TabBarContainer>
             <PostContainer>
-              {datas.slice(0, visibleCount).map((data) => (
+              {data?.list?.slice(0, visibleCount).map((law) => (
                 <Post
-                  onClick={() => handlePostClick(data.id)}
-                  key={data.id}
-                  title={data.title}
-                  content={data.content}
-                  enforcementDate={data.enforcementDate}
-                  promulgationDate={data.promulgationDate}
-                  status={data.status}
+                  onClick={() => handlePostClick(law.id)}
+                  key={law.id}
+                  title={law.title}
+                  content={law.content}
+                  enforcementDate={law.enforcementDate}
+                  promulgationDate={law.promulgationDate}
+                  status={law.status}
                 />
               ))}
             </PostContainer>
           </div>
         </PostCountContainer>
-        {visibleCount < datas.length && (
+        {visibleCount < data.length && (
           <Button
             backgroundColor="#FFFFFF"
             color="#8D8D8D"
             borderColor="#D4D4D4"
             onClick={handleMore}
           >
-            더보기 ({visibleCount}/{datas.length}) +
+            더보기 ({visibleCount}/{data.length}) +
           </Button>
         )}
       </ButtonContainer>
@@ -144,7 +73,7 @@ export const BillList = () => {
   );
 };
 
-// 스타일은 동일하게 유지
+// 스타일은 그대로 유지
 const ButtonContainer = styled.div`
   width: 100%;
   display: flex;

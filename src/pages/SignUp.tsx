@@ -3,32 +3,45 @@ import { authImg } from '../assets';
 import { Button, Inputs, Title } from '../components';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  useCheckEmailDuplicate,
+  useSendAuthCode,
+  useVerifyAuthCode,
+} from '../apis/Email';
+import { useSignUp } from '../apis/Auth';
 
 export const SignUp = () => {
+  const emailCheckApi = useCheckEmailDuplicate();
+  const codeApi = useSendAuthCode();
+  const verifyAuthCodeApi = useVerifyAuthCode();
+  const signUpApi = useSignUp();
+
   const navigate = useNavigate();
-  const [datas, setDatas] = useState<{
-    name: string;
-    email: string;
-    code: string;
-    password: string;
-  }>({
+  const [datas, setDatas] = useState({
     name: '',
     email: '',
     code: '',
     password: '',
   });
-  const [delayTime, setDelayTime] = useState<number>(150);
+  const [delayTime, setDelayTime] = useState<number>(0);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  console.log(datas);
-
-  const [pwdDatas, setPwdDatas] = useState<{
-    password: string;
-    checkPassword: string;
-  }>({ password: '', checkPassword: '' });
+  const [pwdDatas, setPwdDatas] = useState({
+    password: '',
+    checkPassword: '',
+  });
 
   const handleSignUpClick = () => {
-    //signup api 호출
+    if (!isEmailVerified) {
+      alert('이메일 인증을 완료해 주세요.');
+      return;
+    }
+    signUpApi.mutate({
+      name: datas.name,
+      email: datas.email,
+      password: datas.password,
+    });
   };
 
   const handleLoginClick = () => {
@@ -36,49 +49,73 @@ export const SignUp = () => {
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setDatas((datas) => ({ ...datas, name: value }));
+    setDatas((prev) => ({ ...prev, name: e.target.value }));
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setDatas((datas) => ({ ...datas, email: value }));
+    setDatas((prev) => ({ ...prev, email: e.target.value }));
   };
 
   const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setDatas((datas) => ({ ...datas, code: value }));
+    setDatas((prev) => ({ ...prev, code: e.target.value }));
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setPwdDatas((pwdDatas) => ({ ...pwdDatas, password: value }));
+    setPwdDatas((prev) => ({ ...prev, password: e.target.value }));
   };
 
   const handlePasswordCheckChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const value = e.target.value;
-    setPwdDatas((pwdDatas) => ({ ...pwdDatas, checkPassword: value }));
+    setPwdDatas((prev) => ({ ...prev, checkPassword: e.target.value }));
   };
 
   const handleCodeClick = () => {
-    let time = 150;
-    setDelayTime(time);
+    emailCheckApi.mutate(
+      { email: datas.email },
+      {
+        onSuccess: () => {
+          let time = 150;
+          setDelayTime(time);
+          setIsEmailVerified(false); // 새로 요청 시 인증 다시 해야 함
 
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
+          if (timerRef.current) {
+            clearInterval(timerRef.current);
+          }
 
-    timerRef.current = setInterval(() => {
-      time -= 1;
-      setDelayTime(time);
+          timerRef.current = setInterval(() => {
+            setDelayTime((prev) => {
+              if (prev <= 1 && timerRef.current) {
+                clearInterval(timerRef.current);
+                return 0;
+              }
+              return prev - 1;
+            });
+          }, 1000);
 
-      if (time <= 0 && timerRef.current) {
-        clearInterval(timerRef.current);
+          codeApi.mutate({ email: datas.email });
+        },
+        onError: (error) => {
+          console.error(error.message);
+        },
       }
-    }, 1000);
-    //code 받아오는 api
+    );
+  };
+
+  const handleCodeBlur = () => {
+    verifyAuthCodeApi.mutate(
+      { email: datas.email, authCode: datas.code },
+      {
+        onSuccess: () => {
+          setIsEmailVerified(true);
+          alert('이메일 인증이 완료되었습니다.');
+        },
+        onError: () => {
+          setIsEmailVerified(false);
+          alert('인증번호가 올바르지 않습니다.');
+        },
+      }
+    );
   };
 
   useEffect(() => {
@@ -89,7 +126,6 @@ export const SignUp = () => {
         const timer = setTimeout(() => {
           alert('비밀번호가 일치하지 않습니다.');
         }, 3000);
-
         return () => clearTimeout(timer);
       }
     }
@@ -123,6 +159,7 @@ export const SignUp = () => {
               </EmailContainer>
               <DelayContainer>
                 <Inputs
+                  onBlur={handleCodeBlur}
                   value={datas.code}
                   onChange={handleCodeChange}
                   placeholder="인증코드를 입력해주세요."
@@ -131,6 +168,9 @@ export const SignUp = () => {
                   대기 시간 : {Math.floor(delayTime / 60)}분{' '}
                   {String(delayTime % 60).padStart(2, '0')}초
                 </DelayText>
+                {isEmailVerified && (
+                  <DelayText style={{ color: 'green' }}>✅ 인증 완료</DelayText>
+                )}
               </DelayContainer>
             </SubInputContainer>
             <SubInputContainer>

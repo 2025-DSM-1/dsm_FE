@@ -3,6 +3,7 @@ import { authImg } from '../assets';
 import { Button, Inputs, Title } from '../components';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLogin } from '../apis/Auth';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -16,9 +17,10 @@ export const Login = () => {
     navigate('/signup');
   };
 
+  const loginApi = useLogin();
+
   const handleLoginClick = () => {
-    //login api 호출
-    navigate('/bill/main');
+    loginApi.mutate({ email: datas.id, password: datas.password });
   };
 
   const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {

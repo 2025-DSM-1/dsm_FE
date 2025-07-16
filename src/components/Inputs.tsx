@@ -9,6 +9,7 @@ interface IInputsType {
   width?: string;
   isPwd?: boolean;
   label?: string;
+  onBlur?: () => void;
 }
 
 export const Inputs = ({
@@ -18,6 +19,7 @@ export const Inputs = ({
   width = '100%',
   isPwd,
   label,
+  onBlur,
 }: IInputsType) => {
   const [isEye, setIsEye] = useState<boolean>(false);
 
@@ -30,6 +32,7 @@ export const Inputs = ({
       <Label>{label}</Label>
       <EyesContainer width={width}>
         <Input
+          onBlur={onBlur}
           placeholder={placeholder}
           value={value}
           onChange={onChange}
