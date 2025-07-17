@@ -13,9 +13,23 @@ export interface LawDetailType {
   example: string;
 }
 
+
+export interface LawListData {
+  lawId: number;
+  lawSerialNumber: number;
+  lawTitle: string;
+  lawContent: string;
+  promulgationDate: string;
+  resolutionResult: string;
+}
+
+export interface LawListResponse {
+  laws: LawListData[];
+}
+
 // 법안 전체 조회
 export const useLawList = () => {
-  return useQuery({
+  return useQuery<LawListResponse>({
     queryKey: ['LawList'],
     queryFn: async () => {
       const { data } = await instance.get(path);

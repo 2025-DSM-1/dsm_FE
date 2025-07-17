@@ -3,11 +3,14 @@ import { useState } from "react";
 import { UserInformation } from "./UserInformation";
 import { Favorites } from "./Favorites"
 import { motion } from "framer-motion";
+import { useMy } from "../../apis/User";
 
 const accountItems = ["회원정보 확인"];
 const favoriteItems = ["즐겨찾기한 법안"];
 
 export const MyPage = () => {
+  const { data } = useMy();
+
   const [selected, setSelected] = useState<string>("회원정보 확인");
 
   return (
@@ -16,7 +19,7 @@ export const MyPage = () => {
         <SideSection>
           <Title>마이페이지</Title>
           <SideBarContainer>
-            <UserName>홍길동</UserName>
+            <UserName>{data?.name}</UserName>
 
             <ListWrapper>
               <ListTitle>계정정보</ListTitle>

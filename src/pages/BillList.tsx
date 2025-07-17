@@ -86,6 +86,7 @@ export const BillList = () => {
 
   const navigate = useNavigate();
   const [visibleCount, setVisibleCount] = useState(20);
+  const [sortSelected, setSortSelected] = useState<string>('가나다 순');
 
   const handleMore = () => {
     setVisibleCount((prev) => prev + 20);
@@ -115,6 +116,29 @@ export const BillList = () => {
             개
           </PostCount>
           <div>
+          <PostHeader>
+            <PostCount>
+              총{' '}
+              <PostCount style={{ fontWeight: '600' }}>{datas.length}</PostCount>
+              개
+            </PostCount>
+            <SortWrapper>
+              <SortText
+                isSelected={sortSelected === '가나다 순'}
+                onClick={() => setSortSelected('가나다 순')}
+              >
+                가나다 순
+              </SortText>
+              <SortLine />
+              <SortText
+                isSelected={sortSelected === '최신제안 순'}
+                onClick={() => setSortSelected('최신제안 순')}
+              >
+                최신제안 순
+              </SortText>
+            </SortWrapper>
+          </PostHeader>
+          <TableContainer>
             <TabBarContainer>
               <TabTitle basis="43rem">법안</TabTitle>
               <TabTitle basis="9.5rem">제안일자</TabTitle>
@@ -134,7 +158,7 @@ export const BillList = () => {
                 />
               ))}
             </PostContainer>
-          </div>
+          </TableContainer>
         </PostCountContainer>
         {data?.laws && visibleCount < data.laws.length && (
           <Button
@@ -147,7 +171,7 @@ export const BillList = () => {
           </Button>
         )}
       </ButtonContainer>
-    </Container>
+    </Container >
   );
 };
 
@@ -172,6 +196,11 @@ const PostCountContainer = styled.div`
   flex-direction: column;
   gap: 1.25rem;
 `;
+
+const PostHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
 
 const PostCount = styled.span`
   font-size: 1rem;
@@ -228,3 +257,28 @@ const Title = styled.div`
   font-size: 1.5rem;
   font-weight: 700;
 `;
+
+const SortWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`
+
+const SortText = styled.p<{ isSelected: boolean }>`
+  font-size: 16px;
+  font-weight: 500;
+  color: ${({ isSelected }) => (isSelected ? '#000000' : '#b0b0b0')};
+  cursor: pointer;
+`
+
+const SortLine = styled.div`
+  width: 1.5px;
+  height: 16px;
+  background-color: #000;
+`
+
+const TableContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`
