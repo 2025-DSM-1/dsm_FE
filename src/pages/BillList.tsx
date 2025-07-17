@@ -6,84 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { useLawList } from '../apis/Law';
 
 export const BillList = () => {
-  const { data } = useLawList();
-
-  console.log(data);
-  //   const [datas] = useState([
-  //     {
-  //       id: 1,
-  //       title: '청소년 보호법',
-  //       content: '청소년 유해 매체물 규제 강화',
-  //       promulgationDate: '2024-02-02',
-  //       resolutionResult: '공포',
-  //       status: '발의',
-  //     },
-  //     {
-  //       id: 2,
-  //       title: '청소년 보호법',
-  //       content: '청소년 유해 매체물 규제 강화',
-  //       promulgationDate: '2024-02-02',
-  //       resolutionResult: '공포',
-  //       status: '접수',
-  //     },
-  //     {
-  //       id: 3,
-  //       title: '청소년 보호법',
-  //       content: '청소년 유해 매체물 규제 강화',
-  //       promulgationDate: '2024-02-02',
-  //       resolutionResult: '공포',
-  //       status: '심사',
-  //     },
-  //     {
-  //       id: 4,
-  //       title: '청소년 보호법',
-  //       content: '청소년 유해 매체물 규제 강화',
-  //       promulgationDate: '2024-02-02',
-  //       resolutionResult: '공포',
-  //       status: '통과',
-  //     },
-  //     {
-  //       id: 5,
-  //       title: '청소년 보호법',
-  //       content: '청소년 유해 매체물 규제 강화',
-  //       promulgationDate: '2024-02-02',
-  //       resolutionResult: '공포',
-  //       status: '공포',
-  //     },
-  //     {
-  //       id: 6,
-  //       title: '청소년 보호법',
-  //       content: '청소년 유해 매체물 규제 강화',
-  //       promulgationDate: '2024-02-02',
-  //       resolutionResult: '공포',
-  //       status: '시행',
-  //     },
-  //     {
-  //       id: 7,
-  //       title: '청소년 보호법',
-  //       content: '청소년 유해 매체물 규제 강화',
-  //       promulgationDate: '2024-02-02',
-  //       resolutionResult: '공포',
-  //       status: '발의',
-  //     },
-  //     {
-  //       id: 8,
-  //       title: '청소년 보호법',
-  //       content: '청소년 유해 매체물 규제 강화',
-  //       promulgationDate: '2024-02-02',
-  //       resolutionResult: '공포',
-  //       status: '접수',
-  //     },
-  //     {
-  //       id: 9,
-  //       title: '청소년 보호법',
-  //       content: '청소년 유해 매체물 규제 강화',
-  //       promulgationDate: '2024-02-02',
-  //       resolutionResult: '공포',
-  //       status: '심사',
-  //     },
-  //   ]);
-
+  const { data, isLoading, error } = useLawList();
+  
   const navigate = useNavigate();
   const [visibleCount, setVisibleCount] = useState(20);
   const [sortSelected, setSortSelected] = useState<string>('가나다 순');

@@ -15,24 +15,8 @@ interface BillCardProps {
   };
 }
 
-const data = {
-  lawId: 2,
-  lawTitle: "개인정보 보호법 일부개정법률안",
-  lawSummaryContent: [
-    { summaryElement: "개인정보의 자동 수집 범위를 명확히 정의한다." },
-    { summaryElement: "이용자의 동의 없는 3자 제공 시 법적 제재를 강화한다." },
-    { summaryElement: "개인정보 유출 시 플랫폼의 즉시 신고 의무를 부과한다." }
-  ],
-  lawStatus: "위원회 심사",
-  propositionDate: "2024-04-15",
-  backgroundInfo:
-    "데이터 유출 사고가 빈번히 발생하면서 개인정보 보호에 대한 사회적 요구가 증가하고 있다. 특히 플랫폼 기업의 책임을 강화하자는 요구가 많아 법 개정이 추진되었다.",
-  example:
-    "예를 들어, SNS 기업이 수집한 위치정보를 이용자 동의 없이 광고업체에 제공한 사례가 논란이 되었고, 이를 규제하기 위한 조치이다."
-}
-
 export const BillCard = ({ law }: BillCardProps) => {
-  // const { data } = useLawDetail(lawId);
+  const { data } = useLawDetail(law.lawId);
 
   const [isFront, setIsFront] = useState<boolean>(true);
 
@@ -49,8 +33,8 @@ export const BillCard = ({ law }: BillCardProps) => {
             <LawTitleText>{law.lawTitle}</LawTitleText>
           </TitleSection>
           <BottomSection>
-            <StatusTag>{data.lawStatus}</StatusTag>
-            <DateLabel>{formatDate(data.propositionDate)}</DateLabel>
+            <StatusTag>{data?.lawStatus}</StatusTag>
+            {data?.propositionDate && <DateLabel>{formatDate(data?.propositionDate)}</DateLabel>}
           </BottomSection>
         </CardFaceFront>
 
