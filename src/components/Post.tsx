@@ -108,7 +108,7 @@ const Result = styled.div`
   font-size: 16px;
   font-weight: 400;
   flex: 0 0 9.5rem;
-  color: #2B75FF;
+  color: #2b75ff;
 `;
 
 const Title = styled.div`
@@ -121,7 +121,7 @@ const Content = styled.div`
 `;
 
 const StatusContainer = styled.div<Omit<IStatusType, 'children'>>`
-  flex: 0 0 4.4rem;
+  flex: 0 0 7rem;
   padding: 8px 20px;
   border-radius: 6px;
   border: 1px solid ${({ borderColor }) => borderColor};

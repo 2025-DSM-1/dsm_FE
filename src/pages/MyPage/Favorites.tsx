@@ -1,6 +1,6 @@
-import styled from "@emotion/styled"
-import { LawTitleCard } from "./LawTitleCard"
-import { useDeleteFavoriteBill, useGetFavoriteList } from "../../apis/Favorite";
+import styled from '@emotion/styled';
+import { LawTitleCard } from './LawTitleCard';
+import { useGetFavoriteList } from '../../apis/Favorite';
 
 export interface FavoriteLaw {
   lawId: number;
@@ -13,7 +13,7 @@ export interface FavoriteLawResponse {
 
 export const Favorites = () => {
   const { data }: { data?: FavoriteLawResponse } = useGetFavoriteList();
-  const { mutate: deleteFavorite } = useDeleteFavoriteBill();
+  // const { mutate: deleteFavorite } = useDeleteFavoriteBill();
 
   return (
     <Container>
@@ -25,7 +25,6 @@ export const Favorites = () => {
               key={law.lawId}
               lawId={law.lawId}
               lawTitle={law.lawTitle}
-              onDelete={() => deleteFavorite(law.lawId)}
             />
           ))
         ) : (
@@ -33,22 +32,22 @@ export const Favorites = () => {
         )}
       </Content>
     </Container>
-  )
-}
+  );
+};
 
 const Container = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-`
+`;
 
 const Title = styled.p`
   padding: 16px 0;
   border-top: 1px solid #000;
-  border-bottom: 1px solid #EAEAEA;
+  border-bottom: 1px solid #eaeaea;
   font-size: 24px;
   font-weight: 600;
-`
+`;
 
 const Content = styled.div`
   padding: 40px 35px 200px;
@@ -57,4 +56,4 @@ const Content = styled.div`
   gap: 35px;
 `;
 
-const EmptyMessage = styled.p``
+const EmptyMessage = styled.p``;

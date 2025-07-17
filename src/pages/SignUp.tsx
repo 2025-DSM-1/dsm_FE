@@ -45,7 +45,7 @@ export const SignUp = () => {
   };
 
   const handleLoginClick = () => {
-    navigate('/login');
+    navigate('/');
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,6 +79,7 @@ export const SignUp = () => {
             { email: datas.email },
             {
               onSuccess: () => {
+                alert('인증번호가 발송되었습니다.');
                 let time = 150;
                 setDelayTime(time);
                 setIsEmailVerified(false);
@@ -169,12 +170,11 @@ export const SignUp = () => {
                   onChange={handleCodeChange}
                   placeholder="인증코드를 입력해주세요."
                 />
-                <DelayText>
-                  대기 시간 : {Math.floor(delayTime / 60)}분{' '}
-                  {String(delayTime % 60).padStart(2, '0')}초
-                </DelayText>
-                {isEmailVerified && (
-                  <DelayText style={{ color: 'green' }}>✅ 인증 완료</DelayText>
+                {!isEmailVerified && (
+                  <DelayText>
+                    대기 시간 : {Math.floor(delayTime / 60)}분{' '}
+                    {String(delayTime % 60).padStart(2, '0')}초
+                  </DelayText>
                 )}
               </DelayContainer>
             </SubInputContainer>

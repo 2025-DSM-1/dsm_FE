@@ -6,81 +6,84 @@ import { useNavigate } from 'react-router-dom';
 import { useLawList } from '../apis/Law';
 
 export const BillList = () => {
-  const { data, isLoading, error } = useLawList();
-//   const [datas] = useState([
-//     {
-//       id: 1,
-//       title: '청소년 보호법',
-//       content: '청소년 유해 매체물 규제 강화',
-//       promulgationDate: '2024-02-02',
-//       resolutionResult: '공포',
-//       status: '발의',
-//     },
-//     {
-//       id: 2,
-//       title: '청소년 보호법',
-//       content: '청소년 유해 매체물 규제 강화',
-//       promulgationDate: '2024-02-02',
-//       resolutionResult: '공포',
-//       status: '접수',
-//     },
-//     {
-//       id: 3,
-//       title: '청소년 보호법',
-//       content: '청소년 유해 매체물 규제 강화',
-//       promulgationDate: '2024-02-02',
-//       resolutionResult: '공포',
-//       status: '심사',
-//     },
-//     {
-//       id: 4,
-//       title: '청소년 보호법',
-//       content: '청소년 유해 매체물 규제 강화',
-//       promulgationDate: '2024-02-02',
-//       resolutionResult: '공포',
-//       status: '통과',
-//     },
-//     {
-//       id: 5,
-//       title: '청소년 보호법',
-//       content: '청소년 유해 매체물 규제 강화',
-//       promulgationDate: '2024-02-02',
-//       resolutionResult: '공포',
-//       status: '공포',
-//     },
-//     {
-//       id: 6,
-//       title: '청소년 보호법',
-//       content: '청소년 유해 매체물 규제 강화',
-//       promulgationDate: '2024-02-02',
-//       resolutionResult: '공포',
-//       status: '시행',
-//     },
-//     {
-//       id: 7,
-//       title: '청소년 보호법',
-//       content: '청소년 유해 매체물 규제 강화',
-//       promulgationDate: '2024-02-02',
-//       resolutionResult: '공포',
-//       status: '발의',
-//     },
-//     {
-//       id: 8,
-//       title: '청소년 보호법',
-//       content: '청소년 유해 매체물 규제 강화',
-//       promulgationDate: '2024-02-02',
-//       resolutionResult: '공포',
-//       status: '접수',
-//     },
-//     {
-//       id: 9,
-//       title: '청소년 보호법',
-//       content: '청소년 유해 매체물 규제 강화',
-//       promulgationDate: '2024-02-02',
-//       resolutionResult: '공포',
-//       status: '심사',
-//     },
-//   ]);
+  const { data } = useLawList();
+
+  console.log(data);
+  //   const [datas] = useState([
+  //     {
+  //       id: 1,
+  //       title: '청소년 보호법',
+  //       content: '청소년 유해 매체물 규제 강화',
+  //       promulgationDate: '2024-02-02',
+  //       resolutionResult: '공포',
+  //       status: '발의',
+  //     },
+  //     {
+  //       id: 2,
+  //       title: '청소년 보호법',
+  //       content: '청소년 유해 매체물 규제 강화',
+  //       promulgationDate: '2024-02-02',
+  //       resolutionResult: '공포',
+  //       status: '접수',
+  //     },
+  //     {
+  //       id: 3,
+  //       title: '청소년 보호법',
+  //       content: '청소년 유해 매체물 규제 강화',
+  //       promulgationDate: '2024-02-02',
+  //       resolutionResult: '공포',
+  //       status: '심사',
+  //     },
+  //     {
+  //       id: 4,
+  //       title: '청소년 보호법',
+  //       content: '청소년 유해 매체물 규제 강화',
+  //       promulgationDate: '2024-02-02',
+  //       resolutionResult: '공포',
+  //       status: '통과',
+  //     },
+  //     {
+  //       id: 5,
+  //       title: '청소년 보호법',
+  //       content: '청소년 유해 매체물 규제 강화',
+  //       promulgationDate: '2024-02-02',
+  //       resolutionResult: '공포',
+  //       status: '공포',
+  //     },
+  //     {
+  //       id: 6,
+  //       title: '청소년 보호법',
+  //       content: '청소년 유해 매체물 규제 강화',
+  //       promulgationDate: '2024-02-02',
+  //       resolutionResult: '공포',
+  //       status: '시행',
+  //     },
+  //     {
+  //       id: 7,
+  //       title: '청소년 보호법',
+  //       content: '청소년 유해 매체물 규제 강화',
+  //       promulgationDate: '2024-02-02',
+  //       resolutionResult: '공포',
+  //       status: '발의',
+  //     },
+  //     {
+  //       id: 8,
+  //       title: '청소년 보호법',
+  //       content: '청소년 유해 매체물 규제 강화',
+  //       promulgationDate: '2024-02-02',
+  //       resolutionResult: '공포',
+  //       status: '접수',
+  //     },
+  //     {
+  //       id: 9,
+  //       title: '청소년 보호법',
+  //       content: '청소년 유해 매체물 규제 강화',
+  //       promulgationDate: '2024-02-02',
+  //       resolutionResult: '공포',
+  //       status: '심사',
+  //     },
+  //   ]);
+
   const navigate = useNavigate();
   const [visibleCount, setVisibleCount] = useState(20);
   const [sortSelected, setSortSelected] = useState<string>('가나다 순');
@@ -92,9 +95,6 @@ export const BillList = () => {
   const handlePostClick = (id: number) => {
     navigate(`/bill/detail/${id}`);
   };
-
-  if (isLoading) return <div>로딩 중...</div>;
-  if (error || !data) return <div>에러가 발생했습니다.</div>;
 
   return (
     <Container>
@@ -110,7 +110,9 @@ export const BillList = () => {
           <PostHeader>
             <PostCount>
               총{' '}
-              <PostCount style={{ fontWeight: '600' }}>{datas.length}</PostCount>
+              <PostCount style={{ fontWeight: '600' }}>
+                {data?.laws?.length || 0}
+              </PostCount>
               개
             </PostCount>
             <SortWrapper>
@@ -137,21 +139,21 @@ export const BillList = () => {
               <TabTitle basis="8rem">상태</TabTitle>
             </TabBarContainer>
             <PostContainer>
-              {data?.list?.slice(0, visibleCount).map((law) => (
+              {data?.laws?.slice(0, visibleCount).map((law) => (
                 <Post
-                  onClick={() => handlePostClick(law.id)}
-                  key={law.id}
-                  title={law.title}
-                  content={law.content}
+                  onClick={() => handlePostClick(law.lawId)}
+                  key={law.lawId}
+                  title={law.lawTitle}
+                  content={law.lawContent}
                   resolutionResult={law.resolutionResult}
                   promulgationDate={law.promulgationDate}
-                  status={law.status}
+                  status={law.lawStatus}
                 />
               ))}
             </PostContainer>
           </TableContainer>
         </PostCountContainer>
-        {visibleCount < data.length && (
+        {data?.laws && visibleCount < data.laws.length && (
           <Button
             backgroundColor="#FFFFFF"
             color="#8D8D8D"
@@ -162,7 +164,7 @@ export const BillList = () => {
           </Button>
         )}
       </ButtonContainer>
-    </Container >
+    </Container>
   );
 };
 
@@ -191,7 +193,7 @@ const PostCountContainer = styled.div`
 const PostHeader = styled.div`
   display: flex;
   justify-content: space-between;
-`
+`;
 
 const PostCount = styled.span`
   font-size: 1rem;
@@ -253,23 +255,23 @@ const SortWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-`
+`;
 
 const SortText = styled.p<{ isSelected: boolean }>`
   font-size: 16px;
   font-weight: 500;
   color: ${({ isSelected }) => (isSelected ? '#000000' : '#b0b0b0')};
   cursor: pointer;
-`
+`;
 
 const SortLine = styled.div`
   width: 1.5px;
   height: 16px;
   background-color: #000;
-`
+`;
 
 const TableContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-`
+`;

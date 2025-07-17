@@ -1,16 +1,21 @@
-import styled from "@emotion/styled";
-import { Quote } from "../../assets";
-import { useLawDetail } from "../../apis/Law";
-import { formatDate } from "../../hooks/formatDate";
+import styled from '@emotion/styled';
+import { Quote } from '../../assets';
+import { useLawDetail } from '../../apis/Law';
+import { formatDate } from '../../hooks/formatDate';
+import { useDeleteFavoriteBill } from '../../apis/Favorite';
 
 interface LawTitleCardProps {
   lawId: number;
   lawTitle: string;
-  onDelete?: () => void;
 }
 
-export const LawTitleCard = ({ lawId, lawTitle, onDelete }: LawTitleCardProps) => {
+export const LawTitleCard = ({ lawId, lawTitle }: LawTitleCardProps) => {
   const { data } = useLawDetail(lawId);
+  const favoriteDelApi = useDeleteFavoriteBill(lawId);
+
+  const delClick = () => {
+    favoriteDelApi.mutate();
+  };
 
   return (
     <CardContainer>
@@ -21,18 +26,20 @@ export const LawTitleCard = ({ lawId, lawTitle, onDelete }: LawTitleCardProps) =
         </TitleSection>
         <BottomSection>
           <StatusTag>{data?.lawStatus}</StatusTag>
-          {data?.propositionDate && <DateLabel>{formatDate(data.propositionDate)}</DateLabel>}
+          {data?.propositionDate && (
+            <DateLabel>{formatDate(data.propositionDate)}</DateLabel>
+          )}
         </BottomSection>
       </CardWrapper>
 
       <ButtonWrapper>
         <Button>알림 받기</Button>
         <Line></Line>
-        <Button onClick={onDelete}>즐겨찾기 해제</Button>
+        <Button onClick={delClick}>즐겨찾기 해제</Button>
       </ButtonWrapper>
     </CardContainer>
-  )
-}
+  );
+};
 
 const CardContainer = styled.div`
   display: flex;
@@ -42,12 +49,12 @@ const CardContainer = styled.div`
   box-shadow: 0px 4px 20px rgba(45, 47, 75, 0.1);
 
   &:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease-in-out;
+    transform: translateY(-6px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
   }
   cursor: pointer;
-`
+`;
 
 const CardWrapper = styled.div`
   width: 368px;
@@ -83,7 +90,7 @@ const BottomSection = styled.div`
 `;
 
 const StatusTag = styled.span`
-  background-color: #1D3055;
+  background-color: #1d3055;
   color: #fff;
   padding: 6px 20px;
   border-radius: 30px;
@@ -99,7 +106,7 @@ const DateLabel = styled.p`
 
 const ButtonWrapper = styled.div`
   display: flex;
-`
+`;
 
 const Button = styled.button`
   flex: 1;
@@ -108,18 +115,18 @@ const Button = styled.button`
   justify-content: center;
   align-items: center;
   padding: 14px 10px;
-  border-top: 1px solid #E3E3E3;
+  border-top: 1px solid #e3e3e3;
   font-size: 16px;
   font-weight: 500;
-  background-color: #FCFCFC;
+  background-color: #fcfcfc;
 
   &:hover {
     background-color: #f1f1f1;
   }
-`
+`;
 
 const Line = styled.div`
   width: 1px;
   height: 100%;
-  background-color: #E3E3E3;
-`
+  background-color: #e3e3e3;
+`;

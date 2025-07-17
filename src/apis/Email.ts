@@ -28,8 +28,11 @@ export const useCheckEmailDuplicate = () => {
       const response = await instance.post(`${path}/verify`, { email });
       return response.data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       console.log('이메일 중복 확인 성공');
+      if (!data.success) {
+        alert('이메일이 중복되었습니다.');
+      }
     },
     onError: (error) => {
       console.error(error.message);
