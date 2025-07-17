@@ -2,20 +2,35 @@ import styled from "@emotion/styled"
 import { LawTitleCard } from "./LawTitleCard"
 import { useDeleteFavoriteBill, useGetFavoriteList } from "../../apis/Favorite";
 
-const favoriteLaws = [
-  { lawId: 1, lawTitle: "청소년 보호법 일부개정법률안" },
-  { lawId: 2, lawTitle: "개인정보 보호법 전부개정법률안" },
-  { lawId: 3, lawTitle: "전자상거래법 개정안" },
-];
+export interface FavoriteLaw {
+  lawId: number;
+  lawTitle: string;
+}
+
+export interface FavoriteLawResponse {
+  laws: FavoriteLaw[];
+}
 
 export const Favorites = () => {
+  const { data }: { data?: FavoriteLawResponse } = useGetFavoriteList();
+  const { mutate: deleteFavorite } = useDeleteFavoriteBill();
+
   return (
     <Container>
-      <Title>회원정보 확인</Title>
+      <Title>즐겨찾기한 법안</Title>
       <Content>
-        {favoriteLaws.map((law) => (
-          <LawTitleCard key={law.lawId} lawId={law.lawId} lawTitle={law.lawTitle} />
-        ))}
+        {data?.laws.length ? (
+          data.laws.map((law) => (
+            <LawTitleCard
+              key={law.lawId}
+              lawId={law.lawId}
+              lawTitle={law.lawTitle}
+              onDelete={() => deleteFavorite(law.lawId)}
+            />
+          ))
+        ) : (
+          <EmptyMessage>즐겨찾기한 법안이 없습니다.</EmptyMessage>
+        )}
       </Content>
     </Container>
   )
@@ -41,3 +56,5 @@ const Content = styled.div`
   grid-template-columns: repeat(2, 1fr);
   gap: 35px;
 `;
+
+const EmptyMessage = styled.p``

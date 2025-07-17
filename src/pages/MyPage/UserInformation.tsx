@@ -2,26 +2,43 @@ import styled from '@emotion/styled';
 import { Inputs } from '../../components';
 import { useState, useEffect } from 'react';
 import { useMy } from '../../apis/User';
+import { useNavigate } from 'react-router-dom';
 
 export const UserInformation = () => {
-  // const { data } = useMy();
+  const { data } = useMy();
+
+  const navigation = useNavigate();
 
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
-  const [emailConsent, setEmailConsent] = useState<boolean>(false);
+  const [emailConsent, setEmailConsent] = useState<boolean>(() => {
+    const stored = localStorage.getItem('emailConsent');
+    return stored ? stored === 'true' : false;
+  });
 
-  // useEffect(() => {
-  //   if (data) {
-  //     setName(data.name || '');
-  //     setEmail(data.email || '');
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    if (data) {
+      setName(data.name || '');
+      setEmail(data.email || '');
+    }
+  }, [data]);
+
+  useEffect(() => {
+    const storedConsent = localStorage.getItem('emailConsent');
+    if (storedConsent !== null) {
+      setEmailConsent(storedConsent === 'true');
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('emailConsent', String(emailConsent));
+  }, [emailConsent]);
 
   const handleChange =
     (setter: React.Dispatch<React.SetStateAction<string>>) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setter(e.target.value);
-    };
+      (e: React.ChangeEvent<HTMLInputElement>) => {
+        setter(e.target.value);
+      };
 
   const inputData = [
     {
@@ -47,20 +64,23 @@ export const UserInformation = () => {
               value={input.value}
               label={input.label}
               onChange={input.onChange}
+              disabled={true}
             />
           ))}
           <EmailConsentRow>
             <EmailConsentText>이메일 수신 동의</EmailConsentText>
             <ToggleSwitch
               isOn={emailConsent}
-              onClick={() => setEmailConsent(!emailConsent)}
+              onClick={() => setEmailConsent((prev) => !prev)}
             >
               <ToggleCircle isOn={emailConsent} />
             </ToggleSwitch>
           </EmailConsentRow>
         </InputSection>
 
-        <DeleteAccountButton>회원탈퇴</DeleteAccountButton>
+        <DeleteAccountButton onClick={() => navigation('/')}>
+          회원탈퇴
+        </DeleteAccountButton>
       </Content>
     </Container>
   );
