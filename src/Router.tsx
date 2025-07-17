@@ -7,6 +7,7 @@ import {
   Main,
   MyPage,
   Quiz,
+  MindMap
 } from './pages';
 import { RootLayout } from './layout';
 
@@ -43,6 +44,10 @@ export const Router = createBrowserRouter([
         path: 'quiz',
         element: <Quiz />,
       },
+      {
+        path: 'mindMap',
+        element: <MindMap/>
+      }
     ],
   },
 ]);
