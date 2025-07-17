@@ -1,10 +1,12 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useMy } from '../apis/User';
 
 export const Header = () => {
   const navigation = useNavigate();
-  const [name, _] = useState<string>('박예빈');
+  const { data } = useMy();
+  const name = data?.name ?? 'error';
+
   return (
     <HeaderContainer>
       <Logo onClick={() => navigation('main')}>KNOWLAW</Logo>

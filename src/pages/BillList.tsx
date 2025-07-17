@@ -107,19 +107,12 @@ export const BillList = () => {
           </ProcedureContainer>
         </TitleContainer>
         <PostCountContainer>
-          <PostCount>
-            총{' '}
-            <PostCount style={{ fontWeight: '600' }}>
-              {' '}
-              {data?.laws?.length || 0}
-            </PostCount>
-            개
-          </PostCount>
-          <div>
           <PostHeader>
             <PostCount>
               총{' '}
-              <PostCount style={{ fontWeight: '600' }}>{datas.length}</PostCount>
+              <PostCount style={{ fontWeight: '600' }}>
+                {data?.laws?.length || 0}
+              </PostCount>
               개
             </PostCount>
             <SortWrapper>
@@ -151,7 +144,7 @@ export const BillList = () => {
                   onClick={() => handlePostClick(law.lawId)}
                   key={law.lawId}
                   title={law.lawTitle}
-                  content={law.content}
+                  content={law.lawContent}
                   resolutionResult={law.resolutionResult}
                   promulgationDate={law.promulgationDate}
                   status={law.lawStatus}
@@ -171,7 +164,7 @@ export const BillList = () => {
           </Button>
         )}
       </ButtonContainer>
-    </Container >
+    </Container>
   );
 };
 
@@ -200,7 +193,7 @@ const PostCountContainer = styled.div`
 const PostHeader = styled.div`
   display: flex;
   justify-content: space-between;
-`
+`;
 
 const PostCount = styled.span`
   font-size: 1rem;
@@ -262,23 +255,23 @@ const SortWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-`
+`;
 
 const SortText = styled.p<{ isSelected: boolean }>`
   font-size: 16px;
   font-weight: 500;
   color: ${({ isSelected }) => (isSelected ? '#000000' : '#b0b0b0')};
   cursor: pointer;
-`
+`;
 
 const SortLine = styled.div`
   width: 1.5px;
   height: 16px;
   background-color: #000;
-`
+`;
 
 const TableContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-`
+`;
