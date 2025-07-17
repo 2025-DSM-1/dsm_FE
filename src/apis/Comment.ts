@@ -27,11 +27,11 @@ export const useAddVoteComment = (lawId: number) => {
 };
 
 // 전체 찬반 댓글 조회
-export const useGetVoteComment = () => {
+export const useGetVoteComment = (lawId: number) => {
   return useQuery({
-    queryKey: ['VoteComment'],
+    queryKey: ['VoteComment', lawId],
     queryFn: async () => {
-      const { data } = await instance.get(`${path}`);
+      const { data } = await instance.get(`${path}/${lawId}`);
       return data;
     },
     refetchInterval: 5000,
