@@ -10,7 +10,11 @@ export const Main = () => {
   const { data } = useLawList();
 
   const recentLaws = data?.laws
-    .sort((a, b) => new Date(b.promulgationDate).getTime() - new Date(a.promulgationDate).getTime())
+    .sort(
+      (a, b) =>
+        new Date(b.promulgationDate).getTime() -
+        new Date(a.promulgationDate).getTime()
+    )
     .slice(0, 8);
 
   return (
@@ -36,9 +40,9 @@ export const Main = () => {
 
             <S.LatestBillsLinkBox
               bg={LatestBillsLinkBox}
-              onClick={() => navigation('/bill/list')}
+              onClick={() => navigation('/bill/mindMap')}
             >
-              <S.LinkText>{`최신\n법안 보러가기`}</S.LinkText>
+              <S.LinkText>{`법안\n마인드맵`}</S.LinkText>
               <S.ArrowWrapper>
                 <S.ArrowIconWrapper>
                   <Arrow color="#fff" rotate="right" />
@@ -67,7 +71,7 @@ export const Main = () => {
               );
             }
 
-            return <BillCard key={idx} law={recentLaws[idx - 1]} />
+            return <BillCard key={idx} law={recentLaws[idx - 1]} />;
           })}
         </S.GridWrapper>
       </S.BottomSection>
