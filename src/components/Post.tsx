@@ -121,7 +121,7 @@ const Content = styled.div`
 `;
 
 const StatusContainer = styled.div<Omit<IStatusType, 'children'>>`
-  flex: 0 0 7rem;
+  flex: 0 0 9rem;
   padding: 8px 20px;
   border-radius: 6px;
   border: 1px solid ${({ borderColor }) => borderColor};

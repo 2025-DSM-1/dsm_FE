@@ -136,7 +136,7 @@ export const BillList = () => {
               <TabTitle basis="43rem">법안</TabTitle>
               <TabTitle basis="9.5rem">제안일자</TabTitle>
               <TabTitle basis="9.5rem">의결결과</TabTitle>
-              <TabTitle basis="8rem">상태</TabTitle>
+              <TabTitle basis="9rem">상태</TabTitle>
             </TabBarContainer>
             <PostContainer>
               {data?.laws?.slice(0, visibleCount).map((law) => (
