@@ -45,7 +45,7 @@ export const SignUp = () => {
   };
 
   const handleLoginClick = () => {
-    navigate('/login');
+    navigate('/');
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
