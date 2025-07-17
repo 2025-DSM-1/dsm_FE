@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { useLawList } from '../apis/Law';
 
 export const BillList = () => {
-  const { data, isLoading, error } = useLawList();
-  
+  const { data } = useLawList();
+
   const navigate = useNavigate();
   const [visibleCount, setVisibleCount] = useState(20);
   const [sortSelected, setSortSelected] = useState<string>('가나다 순');
@@ -19,6 +19,29 @@ export const BillList = () => {
   const handlePostClick = (id: number) => {
     navigate(`/bill/detail/${id}`);
   };
+
+  // 정렬 함수
+  const getSortedLaws = () => {
+    if (!data?.laws) return [];
+
+    const sortedLaws = [...data.laws];
+
+    if (sortSelected === '가나다 순') {
+      return sortedLaws.sort((a, b) =>
+        a.lawTitle.localeCompare(b.lawTitle, 'ko')
+      );
+    } else if (sortSelected === '최신제안 순') {
+      return sortedLaws.sort(
+        (a, b) =>
+          new Date(b.promulgationDate).getTime() -
+          new Date(a.promulgationDate).getTime()
+      );
+    }
+
+    return sortedLaws;
+  };
+
+  const sortedLaws = getSortedLaws();
 
   return (
     <Container>
@@ -63,7 +86,7 @@ export const BillList = () => {
               <TabTitle basis="9rem">상태</TabTitle>
             </TabBarContainer>
             <PostContainer>
-              {data?.laws?.slice(0, visibleCount).map((law) => (
+              {sortedLaws.slice(0, visibleCount).map((law) => (
                 <Post
                   onClick={() => handlePostClick(law.lawId)}
                   key={law.lawId}
@@ -84,7 +107,7 @@ export const BillList = () => {
             borderColor="#D4D4D4"
             onClick={handleMore}
           >
-            더보기 ({visibleCount}/{data.length}) +
+            더보기 ({visibleCount}/{data.laws.length}) +
           </Button>
         )}
       </ButtonContainer>
