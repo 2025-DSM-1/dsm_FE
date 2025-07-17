@@ -55,7 +55,7 @@ instance.interceptors.response.use(
 
           return instance(originalRequest);
         } catch (refreshError) {
-          window.location.href = '/login';
+          window.location.href = '/';
           return Promise.reject(refreshError);
         }
       }
