@@ -13,6 +13,19 @@ export const refreshInstance = axios.create({
   timeout: 10000,
 });
 
+// 요청 시 accessToken 자동 삽입
+instance.interceptors.request.use(
+  (config) => {
+    const { accessToken } = getToken();
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// 401 에러 응답 시 refreshToken 사용해서 accessToken 재발급
 instance.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {

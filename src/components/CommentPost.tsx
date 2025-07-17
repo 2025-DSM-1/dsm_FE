@@ -25,6 +25,12 @@ export const CommentPost = ({
       setType('반박');
     }
   }, [commentType]);
+
+  const maskAuthor = (author: string) => {
+    if (author.length <= 1) return author;
+    return author[0] + '*'.repeat(author.length - 1);
+  };
+
   return (
     <Container>
       {voteType === 'AGREE' && <Dot isAgree={true} />}
@@ -40,7 +46,7 @@ export const CommentPost = ({
           </TitleContainer>
           <Content>{content}</Content>
         </ContentContainer>
-        <Writer>{author}</Writer>
+        <Writer>{maskAuthor(author)}</Writer>
       </CommentContainer>
       {voteType === 'DISAGREE' && <Dot isAgree={false} />}
     </Container>

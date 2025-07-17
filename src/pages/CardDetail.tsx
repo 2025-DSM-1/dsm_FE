@@ -24,36 +24,30 @@ export const CardDetail = () => {
   //getVoteArguments
   const { data: voteArguments } = useGetVoteArguments(lawId);
 
+  //voteGraph
+  const { data: voteGraphData, refetch: refetchVoteGraph } =
+    useGetVoteGraph(lawId);
+  const voteGraph = voteGraphData || { agree: 0, disagree: 0, totalVote: 0 };
+
   //voteOnBill
   const voteOnBillApi = useVoteOnBill(lawId);
-
-  //voteGraph
-  const { data: voteGraphData } = useGetVoteGraph(lawId);
-  const voteGraph = voteGraphData || { agree: 0, disagree: 0, totalVote: 0 };
 
   //commentWrite
   const commentWriteApi = useAddVoteComment(lawId);
 
   //commentGet
   const { data: commentGetData, refetch: refetchComments } =
-    useGetVoteComment();
-  const comments = commentGetData || [];
+    useGetVoteComment(lawId);
+  const comments = Array.isArray(commentGetData?.comments)
+    ? commentGetData.comments
+    : [];
+  console.log(comments);
 
   //starAdd
   const favoriteAddApi = useAddFavoriteBill(lawId);
 
   //starDel
   const favoriteDelApi = useDeleteFavoriteBill(lawId);
-
-  const [voteDatas] = useState<{
-    agree: number;
-    disagree: number;
-    totalVote: number;
-  }>({
-    agree: 30,
-    disagree: 70,
-    totalVote: 245,
-  });
 
   const [commentDatas] = useState([
     {
@@ -84,8 +78,13 @@ export const CardDetail = () => {
     content: '',
   });
 
-  // 투표 값 상태 추가
-  const [voteValue, setVoteValue] = useState<'AGREE' | 'DISAGREE' | null>(null);
+  // 투표 값 상태 (localStorage에서 불러오기)
+  const [voteValue, setVoteValue] = useState<'AGREE' | 'DISAGREE' | null>(
+    () => {
+      const savedVote = localStorage.getItem(`vote_${lawId}`);
+      return savedVote as 'AGREE' | 'DISAGREE' | null;
+    }
+  );
 
   // Clean up chart instance on unmount
   useEffect(() => {
@@ -96,11 +95,19 @@ export const CardDetail = () => {
     };
   }, []);
 
+  // 컴포넌트 마운트 시 저장된 투표 상태 불러오기
+  useEffect(() => {
+    const savedVote = localStorage.getItem(`vote_${lawId}`);
+    if (savedVote) {
+      setVoteValue(savedVote as 'AGREE' | 'DISAGREE');
+    }
+  }, [lawId]);
+
   const voteData = {
     labels: [],
     datasets: [
       {
-        data: [voteDatas.agree, voteDatas.disagree],
+        data: [voteGraph.agree, voteGraph.disagree],
         backgroundColor: ['#0290F4', '#E90404'],
         borderWidth: 0,
         cutout: '70%',
@@ -117,16 +124,28 @@ export const CardDetail = () => {
     responsive: true,
   };
 
-  const [isStarClick, setIsStarClick] = useState<boolean>(false);
+  const [isStarClick, setIsStarClick] = useState<boolean>(() => {
+    const savedStar = localStorage.getItem(`star_${lawId}`);
+    return savedStar === 'true';
+  });
 
   const handleStarClick = () => {
     setIsStarClick(!isStarClick);
+    localStorage.setItem(`star_${lawId}`, (!isStarClick).toString());
     if (isStarClick) {
-      favoriteDelApi.mutate();
+      favoriteDelApi.mutate(lawId);
     } else if (!isStarClick) {
-      favoriteAddApi.mutate();
+      favoriteAddApi.mutate(lawId);
     }
   };
+
+  // 즐겨찾기 상태 초기화
+  useEffect(() => {
+    const savedStar = localStorage.getItem(`star_${lawId}`);
+    if (savedStar) {
+      setIsStarClick(savedStar === 'true');
+    }
+  }, [lawId]);
 
   const handleTabClick = (type: 'BASIC' | 'ADDITIONAL' | 'REBUTTAL') => {
     setCommentWriteDatas((prev) => ({
@@ -167,13 +186,51 @@ export const CardDetail = () => {
   };
 
   const handleAgreeClick = () => {
-    setVoteValue('AGREE');
-    voteOnBillApi.mutate({ voteType: 'AGREE' }); //찬성 투표 api
+    if (voteValue === null) {
+      setVoteValue('AGREE');
+      localStorage.setItem(`vote_${lawId}`, 'AGREE');
+      voteOnBillApi.mutate(
+        { voteType: 'AGREE' },
+        {
+          onSuccess: () => {
+            // 투표 후 즉시 그래프 데이터 업데이트
+            refetchVoteGraph();
+          },
+          onError: (error) => {
+            console.error('투표 실패:', error);
+            // 에러 발생 시 상태 롤백
+            setVoteValue(null);
+            localStorage.removeItem(`vote_${lawId}`);
+          },
+        }
+      );
+    } else {
+      alert('이미 투표가 완료된 상태입니다.');
+    }
   };
 
   const handleDisAgreeClick = () => {
-    setVoteValue('DISAGREE');
-    voteOnBillApi.mutate({ voteType: 'DISAGREE' }); //반대 투표 api
+    if (voteValue === null) {
+      setVoteValue('DISAGREE');
+      localStorage.setItem(`vote_${lawId}`, 'DISAGREE');
+      voteOnBillApi.mutate(
+        { voteType: 'DISAGREE' },
+        {
+          onSuccess: () => {
+            // 투표 후 즉시 그래프 데이터 업데이트
+            refetchVoteGraph();
+          },
+          onError: (error) => {
+            console.error('투표 실패:', error);
+            // 에러 발생 시 상태 롤백
+            setVoteValue(null);
+            localStorage.removeItem(`vote_${lawId}`);
+          },
+        }
+      );
+    } else {
+      alert('이미 투표가 완료된 상태입니다.');
+    }
   };
 
   return (
@@ -186,13 +243,13 @@ export const CardDetail = () => {
             <ChartContainer>
               <ChartTextContainer>
                 <ChartTextTitle>현재 투표인원</ChartTextTitle>
-                <ChartText>{voteDatas.totalVote}명</ChartText>
+                <ChartText>{voteGraph.totalVote}명</ChartText>
               </ChartTextContainer>
               <Doughnut ref={chartRef} data={voteData} options={voteOptions} />
             </ChartContainer>
             <PercentContainer>
-              <PercentText>찬성 : {voteDatas.agree}%</PercentText>
-              <PercentText>반대 : {voteDatas.disagree}%</PercentText>
+              <PercentText>찬성 : {voteGraph.agree}%</PercentText>
+              <PercentText>반대 : {voteGraph.disagree}%</PercentText>
             </PercentContainer>
           </ChartSubContainer>
           <Line />
@@ -232,9 +289,13 @@ export const CardDetail = () => {
           <Smmation>
             <SmmationTitle>법안 요약 정리</SmmationTitle>
             <Line />
-            <SmmationContent>
-              {lawDetail?.lawSummaryContent || '내용 없음'}
-            </SmmationContent>
+            <SummaryContainer>
+              {lawDetail?.lawSummaryContent.map((data, index) => (
+                <SmmationContent key={index}>
+                  • {data.summaryElement || '내용 없음'}
+                </SmmationContent>
+              ))}
+            </SummaryContainer>
           </Smmation>
           <ExplanationAllContainer>
             <Quotes />
@@ -287,7 +348,7 @@ export const CardDetail = () => {
           <TalkAllContainer>
             <TalkTitleContainer>입장 간 대화</TalkTitleContainer>
             <TalkContentContainer>
-              {commentDatas.map((data) => (
+              {comments.map((data) => (
                 <CommentPost
                   key={data.commentId}
                   commentType={data.commentType}
@@ -341,6 +402,12 @@ export const CardDetail = () => {
     </AllContainer>
   );
 };
+
+const SummaryContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
 
 const ChartBtnContainer = styled.div`
   display: flex;
