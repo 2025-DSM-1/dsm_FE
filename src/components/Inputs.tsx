@@ -10,6 +10,7 @@ interface IInputsType {
   isPwd?: boolean;
   label?: string;
   onBlur?: () => void;
+  disabled?: boolean;
 }
 
 export const Inputs = ({
@@ -20,6 +21,7 @@ export const Inputs = ({
   isPwd,
   label,
   onBlur,
+  disabled = false,
 }: IInputsType) => {
   const [isEye, setIsEye] = useState<boolean>(false);
 
@@ -38,6 +40,7 @@ export const Inputs = ({
           onChange={onChange}
           width={width}
           type={isEye ? 'password' : 'text'}
+          disabled={disabled}
         />
         {isPwd && <Eyes onClick={eyeClick} isEye={isEye} />}
       </EyesContainer>
